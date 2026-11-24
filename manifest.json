@@ -1,0 +1,58 @@
+{
+    "manifest_version": 3,
+    "name": "LMS QUIZ Solver",
+    "version": "2.8",
+    "description": "Quiz Sat - Set dengan LMS QUIZ Solver babas.corppp",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage",
+        "unlimitedStorage",
+        "downloads"
+    ],
+    "host_permissions": [
+        "https://lms.telkomuniversity.ac.id/*"
+    ],
+    "icons": {
+        "16": "asset/icon16.png",
+        "48": "asset/icon48.png",
+        "128": "asset/icon128.png"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "asset/icon16.png",
+            "48": "asset/icon48.png",
+            "128": "asset/icon128.png"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://lms.telkomuniversity.ac.id/mod/quiz/*"
+            ],
+            "js": [
+                "lib/jszip.min.js",
+                "lib/jspdf.umd.min.js",
+                "lib/docx.umd.js",
+                "content.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "asset/devil-svgrepo-com.svg",
+                "asset/icon16.png",
+                "asset/icon48.png",
+                "asset/icon128.png",
+                "lib/jszip.min.js",
+                "lib/jspdf.umd.min.js",
+                "lib/docx.umd.js"
+            ],
+            "matches": [
+                "https://lms.telkomuniversity.ac.id/*"
+            ]
+        }
+    ]
+}
