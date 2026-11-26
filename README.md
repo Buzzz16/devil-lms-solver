@@ -1,27 +1,43 @@
-# 😈 LMS QUIZ SOLVER (v2.8)
+# LMS QUIZ SOLVER (v2.8.8)
 ### *Solusi Kuis Sat-Set, Otomatis, & Cerdas untuk LMS Telkom University*
 
 **LMS QUIZ Solver** adalah ekstensi browser Google Chrome (Manifest V3) yang dirancang untuk mengotomatisasi seluruh alur pengerjaan kuis di portal Learning Management System (LMS Moodle) Telkom University (`https://lms.telkomuniversity.ac.id/mod/quiz/*`). 
 
-Ekstensi ini menghubungkan kuis LMS dengan kecerdasan buatan (AI) seperti **ChatGPT, Claude, atau Gemini** secara *seamless* tanpa perlu copy-paste manual satu per satu nomor soal. Dilengkapi dengan antarmuka modern bertema **Neo-Brutalism "Tuckii"**, pop-up *in-page overlay* langsung di layar web, generator dokumen otomatis (.DOCX & .PDF), serta sistem *fuzzy matching* canggih untuk pengisian jawaban dengan akurasi tinggi.
+Ekstensi ini menghubungkan kuis LMS dengan kecerdasan buatan (AI) seperti **ChatGPT, Claude, atau Gemini** secara *seamless* tanpa perlu copy-paste manual satu per satu nomor soal. Dilengkapi dengan antarmuka modern bertema **Neo-Brutalism "Tuckii"** yang seragam antara popup ekstensi dan *in-page overlay* (menggunakan font **Plus Jakarta Sans** & **JetBrains Mono** serta ikon vektor SVG murni), generator dokumen otomatis (.DOCX & .PDF), serta sistem *fuzzy matching* canggih untuk pengisian jawaban dengan akurasi tinggi.
 
 ---
 
-## 📑 DAFTAR ISI
+## DAFTAR ISI
 
-1. [Fitur-Fitur Utama (Apa Saja yang Bisa Dilakukan Ekstensi Ini?)](#-fitur-fitur-utama)
-2. [Panduan Instalasi Ekstensi](#-panduan-instalasi-ekstensi)
-3. [Panduan Penggunaan Runut (Langkah Demi Langkah)](#-panduan-penggunaan-runut-langkah-demi-langkah)
-4. [Cheatsheet Format Jawaban AI (Penting!)](#-cheatsheet-format-jawaban-ai)
-5. [Tips & Trik Agar Akurasi 100%](#-tips--trik-agar-akurasi-100)
-6. [Troubleshooting & Pemecahan Masalah](#-troubleshooting--pemecahan-masalah)
-7. [Struktur Berkas & Teknologi](#-struktur-berkas--teknologi)
+1. [Fitur-Fitur Utama (Apa Saja yang Bisa Dilakukan Ekstensi Ini?)](#fitur-fitur-utama)
+2. [Pembaruan Terbaru (v2.8.8)](#pembaruan-terbaru-v288)
+3. [Panduan Instalasi Ekstensi](#-panduan-instalasi-ekstensi)
+4. [Panduan Penggunaan Runut (Langkah Demi Langkah)](#-panduan-penggunaan-runut-langkah-demi-langkah)
+5. [Cheatsheet Format Jawaban AI (Penting!)](#-cheatsheet-format-jawaban-ai)
+6. [Tips & Trik Agar Akurasi 100%](#-tips--trik-agar-akurasi-100)
+7. [Troubleshooting & Pemecahan Masalah](#-troubleshooting--pemecahan-masalah)
+8. [Struktur Berkas & Teknologi](#-struktur-berkas--teknologi)
 
 ---
 
-## 🚀 FITUR-FITUR UTAMA
+## Pembaruan Terbaru (v2.8.8)
 
-Berikut adalah kemampuan lengkap yang dimiliki oleh **LMS QUIZ Solver v2.8**:
+- **Deteksi Cerdas Huruf Opsi (`a, b, c, d`) & Prompt AI Adaptif:**
+  - Hasil salinan soal kini hanya menampilkan huruf `a.`, `b.`, `c.` jika di halaman LMS memang terdapat label huruf opsi. Pada soal tanpa huruf opsi (seperti **True/False** atau pilihan ganda tanpa penomoran), teks opsi langsung disalin sebagai daftar (`- True`, `- False`) dan prompt AI otomatis menyesuaikan.
+  - Skoring Auto-Fill pada opsi tanpa huruf opsi dinilai **100% dari kecocokan teks** (bebas dari penalti `CEK ULANG (50%)`).
+- **UI In-Page Overlay Seragam dengan Popup Ekstensi (Tuckii Neo-Brutalism):**
+  - Seluruh modal overlay di layar web, floating pill, menu cepat, dan toast kini menggunakan desain folder-tab yang identik dengan popup ekstensi, font **Plus Jakarta Sans** & **JetBrains Mono**, serta **100% ikon vektor SVG** (tanpa emoji).
+  - Dilengkapi **3 Mode Switcher Tabs** langsung di dalam overlay web (`01. Scrape`, `02. Injector`, `03. Review`) sehingga fitur **Scrape Hasil Jawaban** juga dapat dijalankan langsung dari layar web maupun floating launcher.
+- **Perbaikan Scrape Hasil Jawaban & Modal Laporan Lengkap:**
+  - Mendukung ekstraksi penuh untuk **Soal Menjodohkan** (format 1 baris `|`), **Soal Checkbox multi-jawaban** (mengambil seluruh opsi benar sekaligus), serta **True/False yang salah dijawab** (bersih tanpa tanda kutip/titik).
+  - **Kunci Singkat** menggunakan teks murni tanpa huruf opsi agar tetap akurat 100% meski Moodle mengacak urutan opsi pada percobaan berikutnya.
+  - Tombol **Laporan** kini membuka **Modal Laporan Hasil Kuis** dengan pratinjau rapi dan 4 opsi ekspor: **Salin Laporan**, **Unduh .PDF**, **Unduh .DOCX**, dan **Unduh .TXT**.
+
+---
+
+## Fitur-Fitur Utama
+
+Berikut adalah kemampuan lengkap yang dimiliki oleh **LMS QUIZ Solver v2.8.8**:
 
 ### 1. 🔍 Auto-Scraper Multi-Halaman Otomatis
 - Menjelajahi dan membaca seluruh nomor soal kuis dari halaman pertama sampai halaman terakhir secara mandiri tanpa campur tangan pengguna.

@@ -475,7 +475,7 @@ async function generatePdfDocument(structuredData) {
     y += 6.5;
 
     // Rules / Prompt instructions
-    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: 1. a. Jawaban (sertakan huruf opsi a/b/c/d jika ada)";
+    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: Jika opsi ada huruf (a/b/c/d), tulis `1. a. Jawaban`. Jika tanpa huruf opsi (misal True/False), tulis langsung `1. False`.";
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor(75, 85, 99);
@@ -639,7 +639,7 @@ async function generateDocxDocument(structuredData) {
     );
 
     // 2. Aturan & Petunjuk Jawaban untuk AI
-    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: 1. a. Jawaban (sertakan huruf opsi a/b/c/d jika ada)";
+    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: Jika opsi ada huruf (a/b/c/d), tulis `1. a. Jawaban`. Jika tanpa huruf opsi (misal True/False), tulis langsung `1. False`.";
     promptHeader.split('\n').forEach(line => {
         if (line.trim()) {
             docChildren.push(
@@ -1154,16 +1154,384 @@ function displayReviewResult(data) {
     container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// Helper salin teks dengan fallback textarea
+async function copyTextReliable(text) {
+    if (!text) return false;
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+        }
+    } catch (e) {}
+    try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+    } catch (err) {
+        return false;
+    }
+}
+
+// Generator PDF untuk Laporan Hasil Review Kuis
+async function generateReviewPdfDocument(reviewData) {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        showToast("Pustaka PDF belum dimuat!");
+        return false;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 14;
+    const contentWidth = pageWidth - (margin * 2);
+    let y = margin;
+
+    function checkPageBreak(neededHeight) {
+        if (y + neededHeight > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+            return true;
+        }
+        return false;
+    }
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13.5);
+    doc.setTextColor(17, 24, 39);
+    doc.text("LAPORAN HASIL & KUNCI JAWABAN KUIS LMS", margin, y);
+    y += 6.5;
+
+    const sum = reviewData.summary || {};
+    const metaLines = [];
+    if (sum.grade) metaLines.push(`Nilai Akhir: ${sum.grade}`);
+    if (sum.marks) metaLines.push(`Total Poin: ${sum.marks}`);
+    if (sum.status) metaLines.push(`Status: ${sum.status}`);
+    if (sum.duration) metaLines.push(`Durasi: ${sum.duration}`);
+    if (sum.completed) metaLines.push(`Selesai: ${sum.completed}`);
+    metaLines.push(`Statistik: ${reviewData.totalQuestions || 0} Soal (${reviewData.correctCount || 0} Benar, ${reviewData.incorrectCount || 0} Salah)`);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(55, 65, 81);
+    metaLines.forEach(line => {
+        checkPageBreak(4.5);
+        doc.text(line, margin, y);
+        y += 4.3;
+    });
+    y += 2;
+
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 6;
+
+    const questions = reviewData.questions || [];
+    for (const q of questions) {
+        checkPageBreak(20);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        if (q.isCorrect) doc.setTextColor(22, 101, 52);
+        else doc.setTextColor(185, 28, 28);
+        doc.text(`Soal No. ${q.number} ${q.isCorrect ? "[BENAR]" : "[SALAH]"} ${q.grade ? `(${q.grade})` : ""}`, margin, y);
+        y += 5;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9.5);
+        doc.setTextColor(17, 24, 39);
+        const qLines = doc.splitTextToSize(q.text || "", contentWidth);
+        qLines.forEach(line => {
+            checkPageBreak(4.6);
+            doc.text(line, margin, y);
+            y += 4.4;
+        });
+        y += 2;
+
+        if (q.images && q.images.length > 0) {
+            for (const img of q.images) {
+                if (img.base64) {
+                    const compat = await ensureCompatibleImageDataUrl(img.base64);
+                    if (compat) {
+                        const maxImgW = contentWidth;
+                        const maxImgH = 75;
+                        let imgW = maxImgW;
+                        let imgH = maxImgH;
+                        if (img.width && img.height) {
+                            const ratio = img.width / img.height;
+                            imgW = Math.min(maxImgW, img.width * 0.264583);
+                            imgH = imgW / ratio;
+                            if (imgH > maxImgH) { imgH = maxImgH; imgW = imgH * ratio; }
+                        }
+                        checkPageBreak(imgH + 5);
+                        try {
+                            const imgX = margin + (contentWidth - imgW) / 2;
+                            doc.addImage(compat.dataUrl, compat.format, imgX, y, imgW, imgH);
+                            y += imgH + 4;
+                        } catch (e) {}
+                    }
+                }
+            }
+        }
+
+        if (q.isMatch && q.matchDetails && q.matchDetails.length > 0) {
+            doc.setFontSize(9);
+            q.matchDetails.forEach(m => {
+                const tag = m.isRowCorrect ? "[BENAR]" : "[SALAH]";
+                const rowStr = m.isRowCorrect
+                    ? `${tag} ${m.letter}. ${m.sub} -> ${m.correct}`
+                    : `${tag} ${m.letter}. ${m.sub} -> ${m.chosen || '(Kosong)'} (Kunci: ${m.correct})`;
+                doc.setTextColor(m.isRowCorrect ? 22 : 185, m.isRowCorrect ? 101 : 28, m.isRowCorrect ? 52 : 28);
+                const rLines = doc.splitTextToSize(rowStr, contentWidth - 4);
+                rLines.forEach(rl => {
+                    checkPageBreak(4.4);
+                    doc.text(rl, margin + 2, y);
+                    y += 4.2;
+                });
+            });
+            y += 1.5;
+        } else if (q.options && q.options.length > 0) {
+            doc.setFontSize(9);
+            q.options.forEach(opt => {
+                let prefix = "   ";
+                if (opt.isCorrect && opt.isSelected) {
+                    prefix = "[BENAR - DIPILIH] ";
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(22, 101, 52);
+                } else if (opt.isCorrect) {
+                    prefix = "[KUNCI BENAR] ";
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(22, 101, 52);
+                } else if (opt.isSelected) {
+                    prefix = "[SALAH - DIPILIH] ";
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(185, 28, 28);
+                } else {
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(75, 85, 99);
+                }
+                const optLabel = opt.letter ? `${opt.letter}. ` : "- ";
+                const optLines = doc.splitTextToSize(`${prefix}${optLabel}${opt.text}`, contentWidth - 4);
+                optLines.forEach(ol => {
+                    checkPageBreak(4.3);
+                    doc.text(ol, margin + 2, y);
+                    y += 4.1;
+                });
+            });
+            y += 1.5;
+        }
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9.2);
+        doc.setTextColor(6, 95, 70);
+        const keyLines = doc.splitTextToSize(`Kunci Jawaban: ${q.reportKey || q.correctAnswer || '(Belum terdeteksi)'}`, contentWidth);
+        keyLines.forEach(kl => {
+            checkPageBreak(4.5);
+            doc.text(kl, margin, y);
+            y += 4.3;
+        });
+
+        if (!q.isCorrect && q.studentAnswer) {
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(185, 28, 28);
+            const stuLines = doc.splitTextToSize(`Jawaban Anda: ${q.studentLetter ? q.studentLetter + '. ' : ''}${q.studentAnswer}`, contentWidth);
+            stuLines.forEach(sl => {
+                checkPageBreak(4.5);
+                doc.text(sl, margin, y);
+                y += 4.3;
+            });
+        }
+
+        y += 3;
+        checkPageBreak(5);
+        doc.setDrawColor(229, 231, 235);
+        doc.setLineWidth(0.25);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 5;
+    }
+
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+        doc.setPage(p);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(156, 163, 175);
+        doc.text(`Halaman ${p} dari ${totalPages}  |  Laporan LMS QUIZ Solver`, margin, pageHeight - 8);
+    }
+
+    doc.save('Laporan_Hasil_Kuis_LMS.pdf');
+    return true;
+}
+
+// Generator DOCX untuk Laporan Hasil Review Kuis
+async function generateReviewDocxDocument(reviewData) {
+    if (!window.docx) {
+        showToast("Pustaka docx belum dimuat!");
+        return false;
+    }
+
+    const { Document, Paragraph, TextRun, ImageRun, Packer, AlignmentType, BorderStyle } = window.docx;
+    const children = [];
+
+    children.push(
+        new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 80, after: 160 },
+            children: [new TextRun({ text: "LAPORAN HASIL & KUNCI JAWABAN KUIS LMS", bold: true, size: 30, font: "Calibri", color: "111827" })]
+        })
+    );
+
+    const sum = reviewData.summary || {};
+    const metaItems = [];
+    if (sum.grade) metaItems.push(`Nilai Akhir: ${sum.grade}`);
+    if (sum.marks) metaItems.push(`Total Poin: ${sum.marks}`);
+    if (sum.status) metaItems.push(`Status: ${sum.status}`);
+    if (sum.duration) metaItems.push(`Waktu Kerja: ${sum.duration}`);
+    if (sum.completed) metaItems.push(`Selesai: ${sum.completed}`);
+    metaItems.push(`Statistik: ${reviewData.totalQuestions || 0} Soal (${reviewData.correctCount || 0} Benar, ${reviewData.incorrectCount || 0} Salah)`);
+
+    metaItems.forEach(m => {
+        children.push(
+            new Paragraph({
+                spacing: { after: 50 },
+                children: [new TextRun({ text: m, size: 20, font: "Calibri", color: "374151", bold: m.startsWith("Nilai") || m.startsWith("Statistik") })]
+            })
+        );
+    });
+
+    children.push(
+        new Paragraph({
+            border: { bottom: { color: "000000", space: 6, style: BorderStyle.SINGLE, size: 8 } },
+            spacing: { after: 200 }
+        })
+    );
+
+    const questions = reviewData.questions || [];
+    for (const q of questions) {
+        children.push(
+            new Paragraph({
+                spacing: { before: 140, after: 70 },
+                children: [new TextRun({ text: `Soal No. ${q.number} ${q.isCorrect ? "[BENAR]" : "[SALAH]"} ${q.grade ? `(${q.grade})` : ""}`, bold: true, size: 23, font: "Calibri", color: q.isCorrect ? "166534" : "B91C1C" })]
+            })
+        );
+
+        if (q.text) {
+            q.text.split('\n').forEach(line => {
+                if (line.trim()) {
+                    children.push(new Paragraph({ spacing: { after: 70 }, children: [new TextRun({ text: line, size: 21, font: "Calibri", color: "111827" })] }));
+                }
+            });
+        }
+
+        if (q.images && q.images.length > 0) {
+            for (const img of q.images) {
+                if (img.base64) {
+                    try {
+                        const compat = await ensureCompatibleImageDataUrl(img.base64);
+                        if (compat) {
+                            const imgBytes = base64ToUint8Array(compat.dataUrl);
+                            let w = img.width || 420;
+                            let h = img.height || 240;
+                            if (w > 460) { h = Math.round(h * (460 / w)); w = 460; }
+                            if (h > 300) { w = Math.round(w * (300 / h)); h = 300; }
+                            children.push(
+                                new Paragraph({
+                                    alignment: AlignmentType.CENTER,
+                                    spacing: { before: 80, after: 120 },
+                                    children: [new ImageRun({ data: imgBytes, transformation: { width: Math.max(50, w), height: Math.max(30, h) } })]
+                                })
+                            );
+                        }
+                    } catch (e) {}
+                }
+            }
+        }
+
+        if (q.isMatch && q.matchDetails && q.matchDetails.length > 0) {
+            q.matchDetails.forEach(m => {
+                const rowText = m.isRowCorrect
+                    ? `[BENAR] ${m.letter}. ${m.sub} -> ${m.correct}`
+                    : `[SALAH] ${m.letter}. ${m.sub} -> ${m.chosen || '(Kosong)'} (Kunci: ${m.correct})`;
+                children.push(
+                    new Paragraph({
+                        spacing: { after: 45 },
+                        indent: { left: 320 },
+                        children: [new TextRun({ text: rowText, size: 20, font: "Calibri", bold: m.isRowCorrect, color: m.isRowCorrect ? "166534" : "B91C1C" })]
+                    })
+                );
+            });
+        } else if (q.options && q.options.length > 0) {
+            q.options.forEach(opt => {
+                let tag = "";
+                let color = "374151";
+                let isBold = false;
+                if (opt.isCorrect && opt.isSelected) { tag = "[BENAR - DIPILIH] "; color = "166534"; isBold = true; }
+                else if (opt.isCorrect) { tag = "[KUNCI BENAR] "; color = "166534"; isBold = true; }
+                else if (opt.isSelected) { tag = "[SALAH - DIPILIH] "; color = "B91C1C"; }
+                const optLabel = opt.letter ? `${opt.letter}. ` : "- ";
+                children.push(
+                    new Paragraph({
+                        spacing: { after: 45 },
+                        indent: { left: 320 },
+                        children: [new TextRun({ text: `${tag}${optLabel}${opt.text}`, size: 20, font: "Calibri", bold: isBold, color: color })]
+                    })
+                );
+            });
+        }
+
+        children.push(
+            new Paragraph({
+                spacing: { before: 60, after: 60 },
+                children: [new TextRun({ text: `Kunci Jawaban: ${q.reportKey || q.correctAnswer || '(Belum terdeteksi)'}`, bold: true, size: 21, font: "Calibri", color: "065F46" })]
+            })
+        );
+
+        if (!q.isCorrect && q.studentAnswer) {
+            children.push(
+                new Paragraph({
+                    spacing: { after: 60 },
+                    children: [new TextRun({ text: `Jawaban Anda: ${q.studentLetter ? q.studentLetter + '. ' : ''}${q.studentAnswer} (Salah)`, size: 20, font: "Calibri", color: "B91C1C" })]
+                })
+            );
+        }
+
+        children.push(
+            new Paragraph({
+                border: { bottom: { color: "E5E7EB", space: 4, style: BorderStyle.SINGLE, size: 4 } },
+                spacing: { after: 140 }
+            })
+        );
+    }
+
+    const doc = new Document({
+        sections: [{ properties: { page: { margin: { top: 1200, right: 1200, bottom: 1200, left: 1200 } } }, children }]
+    });
+
+    const blob = await Packer.toBlob(doc);
+    downloadBlob(blob, 'Laporan_Hasil_Kuis_LMS.docx');
+    return true;
+}
+
 // Sub-Action: Copy Kunci Singkat
-document.getElementById('btnCopyQuickKey').addEventListener('click', () => {
+document.getElementById('btnCopyQuickKey').addEventListener('click', async () => {
     if (!currentReviewData || !currentReviewData.quickAnswerKey) {
         showToast("Belum ada data review kuis!");
         return;
     }
-    navigator.clipboard.writeText(currentReviewData.quickAnswerKey).then(() => {
-        showToast("Kunci jawaban disalin!");
-        closePopupDelayed(250);
-    });
+    const ok = await copyTextReliable(currentReviewData.quickAnswerKey);
+    if (ok) {
+        showToast("Kunci singkat disalin ke clipboard!");
+        triggerBurst(window.innerWidth / 2, window.innerHeight / 2);
+    } else {
+        showToast("Gagal menyalin kunci singkat!");
+    }
 });
 
 // Sub-Action: Langsung masukkan kunci ke Textarea Injector (Card 2)
@@ -1189,16 +1557,76 @@ document.getElementById('btnSendToInjector').addEventListener('click', () => {
     }
 });
 
-// Sub-Action: Copy Laporan Lengkap
+// Sub-Action: Buka Modal Laporan Lengkap (Salin / PDF / DOCX / TXT)
 document.getElementById('btnCopyFullReport').addEventListener('click', () => {
     if (!currentReviewData || !currentReviewData.fullReport) {
         showToast("Belum ada data review kuis!");
         return;
     }
-    navigator.clipboard.writeText(currentReviewData.fullReport).then(() => {
-        showToast("Laporan lengkap disalin!");
-        closePopupDelayed(250);
-    });
+    const modal = document.getElementById('modalLaporan');
+    const pre = document.getElementById('modalLaporanPre');
+    const title = document.getElementById('modalLaporanTitle');
+    if (title) {
+        title.innerText = `Laporan (${currentReviewData.totalQuestions || 0} Soal - Nilai: ${currentReviewData.summary?.grade || '100'})`;
+    }
+    if (pre) {
+        pre.textContent = currentReviewData.fullReport;
+    }
+    if (modal) {
+        modal.classList.add('open');
+    }
+});
+
+document.getElementById('btnCloseLaporanModal')?.addEventListener('click', () => {
+    document.getElementById('modalLaporan')?.classList.remove('open');
+});
+
+document.getElementById('btnLaporanCopy')?.addEventListener('click', async () => {
+    if (!currentReviewData || !currentReviewData.fullReport) return;
+    const ok = await copyTextReliable(currentReviewData.fullReport);
+    if (ok) {
+        showToast("Laporan lengkap berhasil disalin!");
+        triggerBurst(window.innerWidth / 2, window.innerHeight / 2);
+    } else {
+        showToast("Gagal menyalin laporan!");
+    }
+});
+
+document.getElementById('btnLaporanPdf')?.addEventListener('click', async (e) => {
+    if (!currentReviewData) return;
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    try {
+        const ok = await generateReviewPdfDocument(currentReviewData);
+        if (ok) showToast("Laporan .PDF berhasil diunduh!");
+    } catch (err) {
+        console.error("Gagal export PDF laporan:", err);
+        showToast("Gagal membuat PDF laporan!");
+    } finally {
+        btn.disabled = false;
+    }
+});
+
+document.getElementById('btnLaporanDocx')?.addEventListener('click', async (e) => {
+    if (!currentReviewData) return;
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    try {
+        const ok = await generateReviewDocxDocument(currentReviewData);
+        if (ok) showToast("Laporan .DOCX berhasil diunduh!");
+    } catch (err) {
+        console.error("Gagal export DOCX laporan:", err);
+        showToast("Gagal membuat DOCX laporan!");
+    } finally {
+        btn.disabled = false;
+    }
+});
+
+document.getElementById('btnLaporanTxt')?.addEventListener('click', () => {
+    if (!currentReviewData || !currentReviewData.fullReport) return;
+    let blob = new Blob([currentReviewData.fullReport], { type: 'text/plain;charset=utf-8' });
+    downloadBlob(blob, `Laporan_Hasil_Kuis_LMS_${new Date().toISOString().slice(0, 10)}.txt`);
+    showToast("Laporan .TXT berhasil diunduh!");
 });
 
 // Sub-Action: Preview Detail Soal (Modal)
@@ -1233,7 +1661,7 @@ function openPreviewModal(data) {
             </div>
             <div class="preview-q-text">${escapeHtml(q.text)}</div>
             <div class="preview-q-key">
-                <b>Kunci:</b> ${escapeHtml(q.correctAnswer || q.studentAnswer || "(Tidak terdeteksi)")}
+                <b>Kunci:</b> ${escapeHtml(q.reportKey || q.correctAnswer || q.studentAnswer || "(Tidak terdeteksi)")}
             </div>
         `;
         modalBody.appendChild(card);

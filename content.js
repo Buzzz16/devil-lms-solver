@@ -67,6 +67,23 @@ function abortCurrentOperation() {
 // 2. IN-PAGE NEO-BRUTALIST STYLES & VISUAL FX
 // ========================================================
 function ensureInjectedStyles() {
+    if (!document.getElementById('lms-solver-google-fonts') && document.head) {
+        const fontPre1 = document.createElement('link');
+        fontPre1.rel = 'preconnect';
+        fontPre1.href = 'https://fonts.googleapis.com';
+        const fontPre2 = document.createElement('link');
+        fontPre2.rel = 'preconnect';
+        fontPre2.href = 'https://fonts.gstatic.com';
+        fontPre2.crossOrigin = 'anonymous';
+        const fontLink = document.createElement('link');
+        fontLink.id = 'lms-solver-google-fonts';
+        fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap';
+        document.head.appendChild(fontPre1);
+        document.head.appendChild(fontPre2);
+        document.head.appendChild(fontLink);
+    }
+
     if (document.getElementById('lms-solver-injected-styles')) return;
 
     const style = document.createElement('style');
@@ -325,22 +342,51 @@ function ensureInjectedStyles() {
             transition: width 0.3s ease !important;
         }
 
-        /* --- IN-PAGE OVERLAY MODAL & POPUP STYLES (v2.8) --- */
+        /* --- IN-PAGE TUCKII NEO-BRUTALISM OVERLAY & POPUP SYSTEM --- */
+        #lms-solver-hud,
+        #lms-solver-hud *,
+        #lms-solver-modal-overlay,
+        #lms-solver-modal-overlay *,
+        #lms-solver-floating-pill,
+        #lms-solver-floating-pill *,
+        #lms-solver-floating-menu,
+        #lms-solver-floating-menu *,
+        #lms-inpage-toast,
+        #lms-inpage-toast * {
+            box-sizing: border-box !important;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+
+        #lms-solver-modal-overlay .lms-mono,
+        #lms-solver-modal-overlay .lms-neo-textarea,
+        #lms-solver-modal-overlay .lms-preview-content,
+        #lms-solver-modal-overlay .lms-report-pre,
+        #lms-solver-modal-overlay code {
+            font-family: 'JetBrains Mono', Consolas, Monaco, monospace !important;
+        }
+
+        .lms-neo-svg {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            vertical-align: middle !important;
+        }
+
         #lms-solver-modal-overlay {
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
-            background: rgba(17, 24, 39, 0.65) !important;
+            background: rgba(0, 0, 0, 0.62) !important;
             backdrop-filter: blur(4px) !important;
             z-index: 99999999 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             padding: 16px !important;
-            box-sizing: border-box !important;
-            animation: lmsSolverFadeIn 0.2s ease-out forwards !important;
+            animation: lmsSolverFadeIn 0.18s ease-out forwards !important;
         }
 
         @keyframes lmsSolverFadeIn {
@@ -349,174 +395,455 @@ function ensureInjectedStyles() {
         }
 
         @keyframes lmsSolverModalPop {
-            0% { transform: scale(0.88) translateY(12px); opacity: 0; }
-            70% { transform: scale(1.02) translateY(-2px); opacity: 1; }
+            0% { transform: scale(0.92) translateY(10px); opacity: 0; }
+            75% { transform: scale(1.015) translateY(-2px); opacity: 1; }
             100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* Custom Neo-Brutalist Scrollbar inside Modal */
+        .lms-modal-body::-webkit-scrollbar,
+        .lms-preview-content::-webkit-scrollbar,
+        .lms-report-pre::-webkit-scrollbar,
+        .lms-detail-scroll::-webkit-scrollbar {
+            width: 7px !important;
+        }
+        .lms-modal-body::-webkit-scrollbar-track,
+        .lms-preview-content::-webkit-scrollbar-track,
+        .lms-report-pre::-webkit-scrollbar-track,
+        .lms-detail-scroll::-webkit-scrollbar-track {
+            background: #FAF7F2 !important;
+            border-left: 2px solid #000000 !important;
+        }
+        .lms-modal-body::-webkit-scrollbar-thumb,
+        .lms-preview-content::-webkit-scrollbar-thumb,
+        .lms-report-pre::-webkit-scrollbar-thumb,
+        .lms-detail-scroll::-webkit-scrollbar-thumb {
+            background: #FFDE59 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 4px !important;
         }
 
         .lms-neo-modal {
             background: #FAF7F2 !important;
             border: 2.5px solid #000000 !important;
-            border-radius: 16px !important;
+            border-radius: 14px !important;
             box-shadow: 6px 6px 0px #000000 !important;
             width: 100% !important;
-            max-width: 520px !important;
+            max-width: 440px !important;
             max-height: 88vh !important;
             display: flex !important;
             flex-direction: column !important;
-            box-sizing: border-box !important;
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
             color: #111827 !important;
             overflow: hidden !important;
-            animation: lmsSolverModalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+            animation: lmsSolverModalPop 0.24s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
             position: relative !important;
         }
 
-        .lms-modal-header {
+        /* Top Hero Bar (matches popup.html) */
+        .lms-modal-topbar {
             display: flex !important;
             justify-content: space-between !important;
             align-items: center !important;
-            padding: 12px 16px !important;
+            padding: 12px 14px 10px 14px !important;
+            background: #FAF7F2 !important;
             border-bottom: 2.5px solid #000000 !important;
-            background: #FFFFFF !important;
         }
 
-        .lms-modal-title {
+        .lms-hero-brand {
             display: flex !important;
             align-items: center !important;
-            gap: 8px !important;
-            font-size: 13.5px !important;
-            font-weight: 900 !important;
-            letter-spacing: -0.3px !important;
-            color: #111827 !important;
+            gap: 10px !important;
         }
 
-        .lms-modal-header-right {
-            display: flex !important;
-            align-items: center !important;
-            gap: 6px !important;
-        }
-
-        .lms-modal-badge {
-            padding: 2px 8px !important;
-            border: 1.5px solid #000000 !important;
-            border-radius: 12px !important;
-            font-size: 10px !important;
-            font-weight: 900 !important;
-            box-shadow: 1.5px 1.5px 0px #000000 !important;
-        }
-        .lms-modal-badge.yellow { background: #FFDE59 !important; color: #000000 !important; }
-        .lms-modal-badge.pink { background: #FF6B8B !important; color: #FFFFFF !important; }
-        .lms-modal-badge.green { background: #4ADE80 !important; color: #000000 !important; }
-
-        .lms-modal-close-btn {
-            width: 28px !important;
-            height: 28px !important;
-            border: 2px solid #000000 !important;
-            border-radius: 8px !important;
-            background: #FFFFFF !important;
-            color: #000000 !important;
-            font-size: 13px !important;
-            font-weight: 900 !important;
-            cursor: pointer !important;
+        .lms-hero-logo-box {
+            width: 38px !important;
+            height: 38px !important;
+            background: #FFDE59 !important;
+            border: 2.5px solid #000000 !important;
+            border-radius: 10px !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            box-shadow: 2px 2px 0px #000000 !important;
-            transition: all 0.1s ease !important;
-        }
-        .lms-modal-close-btn:hover {
-            background: #FF4757 !important;
-            color: #FFFFFF !important;
-            transform: translate(-1px, -1px) !important;
-            box-shadow: 3px 3px 0px #000000 !important;
-        }
-        .lms-modal-close-btn:active {
-            transform: translate(1px, 1px) !important;
-            box-shadow: 0px 0px 0px #000000 !important;
+            flex-shrink: 0 !important;
         }
 
-        .lms-modal-body {
-            padding: 16px !important;
-            overflow-y: auto !important;
+        .lms-hero-title-wrap {
             display: flex !important;
             flex-direction: column !important;
-            gap: 12px !important;
-            box-sizing: border-box !important;
+            gap: 2px !important;
         }
 
-        .lms-modal-alert {
-            padding: 10px 12px !important;
-            border: 2px solid #000000 !important;
-            border-radius: 10px !important;
-            display: flex !important;
-            align-items: flex-start !important;
-            gap: 10px !important;
-            font-size: 11.5px !important;
-            line-height: 1.45 !important;
-            box-shadow: 2.5px 2.5px 0px #000000 !important;
-        }
-        .lms-modal-alert.warning {
-            background: #FFF0A8 !important;
-            color: #854D0E !important;
-        }
-        .lms-modal-alert.success {
-            background: #DCFCE7 !important;
-            color: #166534 !important;
+        .lms-hero-title {
+            font-size: 17px !important;
+            font-weight: 900 !important;
+            line-height: 1.05 !important;
+            letter-spacing: -0.5px !important;
+            color: #000000 !important;
+            margin: 0 !important;
         }
 
-        .lms-modal-actions-container {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 8px !important;
+        .lms-hero-sub {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: #374151 !important;
         }
 
-        .lms-btn-row {
-            display: flex !important;
-            gap: 8px !important;
+        .lms-status-dot {
+            width: 8px !important;
+            height: 8px !important;
+            border-radius: 50% !important;
+            border: 1.5px solid #000000 !important;
+            background: #4ADE80 !important;
+            display: inline-block !important;
         }
-        .lms-btn-row > * {
-            flex: 1 !important;
-        }
+        .lms-status-dot.pink { background: #FF6B8B !important; }
+        .lms-status-dot.yellow { background: #FFDE59 !important; }
 
-        .lms-neo-btn {
+        .lms-icon-btn {
+            width: 34px !important;
+            height: 34px !important;
+            background: #FFFFFF !important;
             border: 2.5px solid #000000 !important;
             border-radius: 10px !important;
-            padding: 10px 14px !important;
-            font-size: 12px !important;
-            font-weight: 800 !important;
-            font-family: inherit !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            color: #000000 !important;
+            padding: 0 !important;
+            transition: all 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        }
+        .lms-icon-btn:hover {
+            background: #FF4757 !important;
+            color: #FFFFFF !important;
+            transform: translate(-1.5px, -1.5px) !important;
+            box-shadow: 4px 4px 0px #000000 !important;
+        }
+        .lms-icon-btn:active {
+            transform: translate(2px, 2px) !important;
+            box-shadow: 1px 1px 0px #000000 !important;
+        }
+
+        /* 3-Feature Mode Switcher Bar (Tuckii Tabs) */
+        .lms-mode-nav {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 6px !important;
+            padding: 8px 14px !important;
+            background: #FFFFFF !important;
+            border-bottom: 2.5px solid #000000 !important;
+        }
+
+        .lms-mode-tab {
+            padding: 6px 6px !important;
+            border: 2px solid #000000 !important;
+            border-radius: 8px !important;
+            background: #FAF7F2 !important;
+            color: #111827 !important;
+            font-size: 10px !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.2px !important;
             cursor: pointer !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
-            gap: 8px !important;
-            box-shadow: 3.5px 3.5px 0px #000000 !important;
-            transition: all 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-            text-decoration: none !important;
-            user-select: none !important;
-            box-sizing: border-box !important;
+            gap: 5px !important;
+            box-shadow: 2px 2px 0px #000000 !important;
+            transition: all 0.12s ease !important;
+            white-space: nowrap !important;
         }
-        .lms-neo-btn:hover {
-            transform: translate(-1.5px, -1.5px) !important;
-            box-shadow: 5px 5px 0px #000000 !important;
+        .lms-mode-tab:hover {
+            transform: translate(-1px, -1px) !important;
+            box-shadow: 3px 3px 0px #000000 !important;
         }
-        .lms-neo-btn:active {
-            transform: translate(2px, 2px) !important;
-            box-shadow: 1px 1px 0px #000000 !important;
-        }
-        .lms-neo-btn.primary-green { background: #4ADE80 !important; color: #000000 !important; }
-        .lms-neo-btn.primary-yellow { background: #FFDE59 !important; color: #000000 !important; }
-        .lms-neo-btn.secondary-purple { background: #C7D2FE !important; color: #1E1B4B !important; }
-        .lms-neo-btn.secondary-green { background: #BBF7D0 !important; color: #064E3B !important; }
-        .lms-neo-btn.secondary-yellow { background: #FEF08A !important; color: #713F12 !important; }
-        .lms-neo-btn.secondary-white { background: #FFFFFF !important; color: #111827 !important; }
+        .lms-mode-tab.active-attempt { background: #4ADE80 !important; color: #000000 !important; }
+        .lms-mode-tab.active-inject { background: #818CF8 !important; color: #000000 !important; }
+        .lms-mode-tab.active-review { background: #FF6B8B !important; color: #000000 !important; }
 
-        .lms-preview-box {
+        .lms-modal-body {
+            padding: 22px 14px 14px 14px !important;
+            overflow-y: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+
+        /* Tuckii Folder Card (1:1 match with popup.html) */
+        .lms-folder-card {
+            position: relative !important;
+            margin-top: 6px !important;
+        }
+
+        .lms-folder-tab {
+            position: absolute !important;
+            top: -15px !important;
+            left: 10px !important;
+            height: 18px !important;
+            padding: 0 10px !important;
+            border: 2.5px solid #000000 !important;
+            border-bottom: none !important;
+            border-radius: 7px 7px 0 0 !important;
+            font-size: 9px !important;
+            font-weight: 900 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            z-index: 1 !important;
+            color: #000000 !important;
+        }
+        .lms-folder-card.card-attempt .lms-folder-tab { background: #4ADE80 !important; }
+        .lms-folder-card.card-inject .lms-folder-tab { background: #818CF8 !important; }
+        .lms-folder-card.card-review .lms-folder-tab { background: #FF6B8B !important; }
+
+        .lms-folder-card-body {
+            position: relative !important;
             background: #FFFFFF !important;
+            border: 2.5px solid #000000 !important;
+            border-radius: 12px !important;
+            box-shadow: 4px 4px 0px #000000 !important;
+            padding: 13px !important;
+            z-index: 2 !important;
+        }
+
+        .lms-card-header-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            margin-bottom: 8px !important;
+        }
+
+        .lms-card-icon-box {
+            width: 38px !important;
+            height: 38px !important;
+            border: 2.5px solid #000000 !important;
+            border-radius: 9px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
+            color: #000000 !important;
+        }
+        .card-attempt .lms-card-icon-box { background: #4ADE80 !important; }
+        .card-inject .lms-card-icon-box { background: #818CF8 !important; }
+        .card-review .lms-card-icon-box { background: #FF6B8B !important; }
+
+        .lms-card-meta-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            color: #374151 !important;
+        }
+
+        .lms-badge-pill {
+            background: #FFDE59 !important;
+            color: #000000 !important;
+            border: 1.5px solid #000000 !important;
+            padding: 1.5px 6px !important;
+            border-radius: 5px !important;
+            font-size: 9px !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.4px !important;
+            box-shadow: 1.5px 1.5px 0px #000000 !important;
+        }
+        .lms-badge-pill.pink { background: #FF6B8B !important; }
+        .lms-badge-pill.green { background: #4ADE80 !important; }
+
+        .lms-card-title {
+            font-size: 15px !important;
+            font-weight: 900 !important;
+            letter-spacing: -0.3px !important;
+            margin: 0 0 3px 0 !important;
+            color: #000000 !important;
+        }
+
+        .lms-card-desc {
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            color: #4B5563 !important;
+            line-height: 1.4 !important;
+            margin: 0 0 10px 0 !important;
+        }
+
+        /* Scrape Status Alert (matches .scrape-image-alert in popup.html) */
+        .lms-scrape-alert {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: #FFF0A8 !important;
             border: 2px solid #000000 !important;
             border-radius: 8px !important;
             padding: 8px 10px !important;
+            margin-bottom: 10px !important;
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            line-height: 1.35 !important;
+            box-shadow: 2px 2px 0px #000000 !important;
+            color: #000000 !important;
+        }
+        .lms-scrape-alert.green {
+            background: #BBF7D0 !important;
+        }
+        .lms-scrape-alert.pink {
+            background: #FECDD3 !important;
+        }
+
+        /* Neo-Brutalist Buttons (matches .neo-btn in popup.html) */
+        .lms-neo-btn {
+            width: 100% !important;
+            padding: 10px 12px !important;
+            border: 2.5px solid #000000 !important;
+            border-radius: 9px !important;
+            box-shadow: 4px 4px 0px #000000 !important;
+            font-size: 12px !important;
+            font-weight: 900 !important;
+            letter-spacing: -0.2px !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 7px !important;
+            transition: all 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            text-decoration: none !important;
+            user-select: none !important;
+            color: #000000 !important;
+            background: #FFFFFF !important;
+        }
+        .lms-neo-btn:hover:not(:disabled) {
+            transform: translate(-1.5px, -1.5px) !important;
+            box-shadow: 5px 5px 0px #000000 !important;
+        }
+        .lms-neo-btn:active:not(:disabled) {
+            transform: translate(2px, 2px) !important;
+            box-shadow: 1px 1px 0px #000000 !important;
+        }
+        .lms-neo-btn:disabled {
+            opacity: 0.65 !important;
+            cursor: not-allowed !important;
+        }
+        .lms-neo-btn.btn-green { background: #4ADE80 !important; color: #000000 !important; }
+        .lms-neo-btn.btn-yellow { background: #FFDE59 !important; color: #000000 !important; }
+        .lms-neo-btn.btn-purple { background: #818CF8 !important; color: #000000 !important; }
+        .lms-neo-btn.btn-pink { background: #FF6B8B !important; color: #000000 !important; }
+        .lms-neo-btn.btn-white { background: #FFFFFF !important; color: #000000 !important; }
+
+        .lms-btn-group-row {
+            display: flex !important;
+            gap: 8px !important;
+            width: 100% !important;
+            margin-top: 8px !important;
+        }
+        .lms-btn-group-row .lms-neo-btn {
+            flex: 1 !important;
+            padding: 9px 8px !important;
+            font-size: 11.5px !important;
+        }
+
+        /* Quick Chips & Textarea (matches Card 2 in popup.html) */
+        .lms-textarea-quick-bar {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            margin-bottom: 8px !important;
+        }
+
+        .lms-quick-chip {
+            padding: 4px 9px !important;
+            border: 1.5px solid #000000 !important;
+            border-radius: 6px !important;
+            background: #FFFFFF !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            cursor: pointer !important;
+            box-shadow: 1.5px 1.5px 0px #000000 !important;
+            transition: all 0.1s ease !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            color: #000000 !important;
+        }
+        .lms-quick-chip:hover {
+            transform: translate(-1px, -1px) !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
+            background: #FFF0A8 !important;
+        }
+        .lms-quick-chip:active {
+            transform: translate(1px, 1px) !important;
+            box-shadow: 0px 0px 0px #000000 !important;
+        }
+
+        .lms-neo-textarea {
+            width: 100% !important;
+            height: 135px !important;
+            background: #FFFDF9 !important;
+            border: 2.5px solid #000000 !important;
+            border-radius: 9px !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
+            padding: 9px 10px !important;
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            line-height: 1.45 !important;
+            resize: vertical !important;
+            outline: none !important;
+            color: #111827 !important;
+            margin-bottom: 8px !important;
+        }
+        .lms-neo-textarea:focus {
+            box-shadow: 4px 4px 0px #000000 !important;
+            background: #FFFFFF !important;
+        }
+
+        .lms-cheatsheet-box {
+            background: #FFFBEB !important;
+            border: 1.5px solid #000000 !important;
+            border-radius: 8px !important;
+            padding: 8px 10px !important;
+            font-size: 10.5px !important;
+            font-weight: 600 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+            margin-bottom: 8px !important;
+            box-shadow: 1.5px 1.5px 0px #000000 !important;
+        }
+        .lms-cheatsheet-item {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            gap: 4px 6px !important;
+            line-height: 1.4 !important;
+            color: #111827 !important;
+        }
+        .lms-cheatsheet-item code {
+            background: #FFFFFF !important;
+            color: #111827 !important;
+            border: 1px solid #000000 !important;
+            border-radius: 5px !important;
+            padding: 2px 6px !important;
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            display: inline-block !important;
+            max-width: 100% !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
+        }
+
+        /* Preview Snippet & Report Pre Box */
+        .lms-preview-box {
+            background: #FFFDF9 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 8px !important;
+            padding: 8px 10px !important;
+            margin-top: 10px !important;
             box-shadow: 2px 2px 0px #000000 !important;
         }
         .lms-preview-header {
@@ -529,198 +856,316 @@ function ensureInjectedStyles() {
             margin-bottom: 4px !important;
         }
         .lms-preview-content {
-            font-family: 'JetBrains Mono', Consolas, Monaco, monospace !important;
-            font-size: 10.5px !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
             color: #374151 !important;
-            max-height: 70px !important;
+            max-height: 64px !important;
             overflow-y: auto !important;
             margin: 0 !important;
             white-space: pre-wrap !important;
             word-break: break-word !important;
         }
 
-        .lms-modal-footer {
-            padding: 10px 16px !important;
-            border-top: 2px solid #000000 !important;
-            background: #FAF7F2 !important;
-            display: flex !important;
-            gap: 8px !important;
-            justify-content: flex-end !important;
-        }
-
-        /* Modal 2 (Paste Answer) Elements */
-        .lms-modal-desc {
-            font-size: 12px !important;
-            font-weight: 600 !important;
-            color: #374151 !important;
-            line-height: 1.45 !important;
-            margin: 0 !important;
-        }
-        .lms-textarea-toolbar {
-            display: flex !important;
-            gap: 6px !important;
-            margin-bottom: 4px !important;
-        }
-        .lms-mini-btn {
-            padding: 4px 9px !important;
-            background: #FFFFFF !important;
-            border: 1.5px solid #000000 !important;
-            border-radius: 6px !important;
-            font-size: 10.5px !important;
-            font-weight: 800 !important;
-            cursor: pointer !important;
-            box-shadow: 1.5px 1.5px 0px #000000 !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 4px !important;
-            transition: all 0.1s ease !important;
-        }
-        .lms-mini-btn:hover {
-            background: #FFDE59 !important;
-            transform: translate(-1px, -1px) !important;
-        }
-        .lms-neo-textarea {
-            width: 100% !important;
-            height: 155px !important;
+        /* Review Results Box (matches #reviewResultContainer in popup.html) */
+        .lms-review-box {
+            margin-top: 10px !important;
+            background: #FFFBEB !important;
             border: 2.5px solid #000000 !important;
             border-radius: 10px !important;
-            background: #FFFFFF !important;
-            padding: 10px 12px !important;
-            font-family: 'JetBrains Mono', Consolas, Monaco, monospace !important;
-            font-size: 11.5px !important;
-            line-height: 1.5 !important;
-            color: #111827 !important;
-            box-shadow: 3.5px 3.5px 0px #000000 !important;
-            box-sizing: border-box !important;
-            outline: none !important;
-            resize: vertical !important;
-        }
-        .lms-neo-textarea:focus {
-            border-color: #000000 !important;
-            box-shadow: 4px 4px 0px #000000, 0 0 0 3px rgba(74, 222, 128, 0.45) !important;
-        }
-        .lms-modal-tip {
-            font-size: 10.5px !important;
-            color: #6B7280 !important;
-            line-height: 1.35 !important;
-        }
-        .lms-cheatsheet-box {
-            background: #FFFBEB !important;
-            border: 1.5px solid #000000 !important;
-            border-radius: 8px !important;
-            padding: 8px 10px !important;
-            font-size: 11px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 4px !important;
-        }
-        .lms-cheatsheet-item code {
-            background: #FFFFFF !important;
-            border: 1px solid #000000 !important;
-            border-radius: 4px !important;
-            padding: 1px 4px !important;
-            font-family: 'JetBrains Mono', monospace !important;
-            font-size: 10px !important;
+            padding: 10px !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
         }
 
-        /* Floating Quick Launcher Pill */
+        .lms-stats-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 6px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .lms-stat-item {
+            background: #FFFFFF !important;
+            border: 1.5px solid #000000 !important;
+            border-radius: 7px !important;
+            padding: 6px 4px !important;
+            text-align: center !important;
+            box-shadow: 1.5px 1.5px 0px #000000 !important;
+        }
+        .lms-stat-item.grade-stat { background: #FFDE59 !important; }
+
+        .lms-stat-label {
+            font-size: 8.5px !important;
+            font-weight: 800 !important;
+            color: #6B7280 !important;
+            text-transform: uppercase !important;
+        }
+
+        .lms-stat-value {
+            font-size: 13px !important;
+            font-weight: 900 !important;
+            color: #000000 !important;
+        }
+
+        .lms-action-row-mini {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 6px !important;
+            margin-bottom: 6px !important;
+        }
+
+        .lms-btn-mini {
+            padding: 7px 6px !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            border: 1.5px solid #000000 !important;
+            border-radius: 7px !important;
+            box-shadow: 1.5px 1.5px 0px #000000 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 5px !important;
+            transition: all 0.1s ease !important;
+            color: #000000 !important;
+            background: #FFFFFF !important;
+        }
+        .lms-btn-mini:hover:not(:disabled) {
+            transform: translate(-1px, -1px) !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
+        }
+        .lms-btn-mini:active:not(:disabled) {
+            transform: translate(1px, 1px) !important;
+            box-shadow: 0.5px 0.5px 0px #000000 !important;
+        }
+        .lms-btn-mini.btn-yellow { background: #FFDE59 !important; }
+        .lms-btn-mini.btn-green { background: #4ADE80 !important; }
+        .lms-btn-mini.btn-purple { background: #818CF8 !important; }
+        .lms-btn-mini.btn-pink { background: #FF6B8B !important; }
+        .lms-btn-mini.btn-white { background: #FFFFFF !important; }
+
+        .lms-report-pre {
+            background: #FFFFFF !important;
+            border: 2px solid #000000 !important;
+            border-radius: 8px !important;
+            padding: 10px !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+            color: #111827 !important;
+            max-height: 210px !important;
+            overflow-y: auto !important;
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            margin: 8px 0 !important;
+            line-height: 1.45 !important;
+            box-shadow: 2px 2px 0px #000000 !important;
+        }
+
+        .lms-detail-scroll {
+            max-height: 210px !important;
+            overflow-y: auto !important;
+            margin-top: 8px !important;
+            padding-right: 2px !important;
+        }
+
+        .lms-q-card {
+            background: #FFFFFF !important;
+            border: 1.5px solid #000000 !important;
+            border-radius: 8px !important;
+            padding: 8px !important;
+            margin-bottom: 7px !important;
+            box-shadow: 1.5px 1.5px 0px #000000 !important;
+        }
+        .lms-q-card-head {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            font-weight: 800 !important;
+            font-size: 10.5px !important;
+            margin-bottom: 4px !important;
+        }
+        .lms-q-card-text {
+            font-size: 10.5px !important;
+            font-weight: 600 !important;
+            color: #1F2937 !important;
+            margin-bottom: 6px !important;
+            line-height: 1.35 !important;
+        }
+        .lms-q-card-key {
+            background: #BBF7D0 !important;
+            border: 1px solid #000000 !important;
+            border-radius: 5px !important;
+            padding: 4px 7px !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: #065F46 !important;
+        }
+
+        .lms-modal-footer {
+            padding: 10px 14px !important;
+            border-top: 2.5px solid #000000 !important;
+            background: #FFFFFF !important;
+            display: flex !important;
+            gap: 8px !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+
+        /* Floating Quick Launcher Pill (Tuckii Neo-Brutalist) */
         #lms-solver-floating-pill {
             position: fixed !important;
-            bottom: 24px !important;
-            right: 24px !important;
+            bottom: 22px !important;
+            right: 22px !important;
             background: #FFDE59 !important;
             border: 2.5px solid #000000 !important;
-            border-radius: 30px !important;
-            padding: 7px 14px !important;
-            display: flex !important;
+            border-radius: 12px !important;
+            padding: 6px 10px 6px 7px !important;
+            display: inline-flex !important;
             align-items: center !important;
-            gap: 7px !important;
+            gap: 8px !important;
             box-shadow: 4px 4px 0px #000000 !important;
             cursor: pointer !important;
             z-index: 9999998 !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
             font-size: 12px !important;
             font-weight: 900 !important;
+            letter-spacing: -0.2px !important;
             color: #000000 !important;
             user-select: none !important;
-            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            transition: all 0.14s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
         #lms-solver-floating-pill:hover {
-            transform: translate(-2px, -2px) scale(1.03) !important;
-            box-shadow: 6px 6px 0px #000000 !important;
+            transform: translate(-1.5px, -1.5px) !important;
+            box-shadow: 5.5px 5.5px 0px #000000 !important;
         }
         #lms-solver-floating-pill:active {
             transform: translate(2px, 2px) !important;
             box-shadow: 1px 1px 0px #000000 !important;
         }
+        .lms-pill-logo {
+            width: 24px !important;
+            height: 24px !important;
+            background: #FFFFFF !important;
+            border: 1.8px solid #000000 !important;
+            border-radius: 7px !important;
+            box-shadow: 1.5px 1.5px 0px #000000 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
         .lms-pill-badge {
             background: #000000 !important;
             color: #FFDE59 !important;
-            font-size: 9px !important;
+            border: 1.5px solid #000000 !important;
+            font-size: 9.5px !important;
             font-weight: 900 !important;
-            padding: 2px 6px !important;
-            border-radius: 10px !important;
+            padding: 2px 7px !important;
+            border-radius: 7px !important;
             letter-spacing: 0.3px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
         }
+        .lms-pill-badge.ready {
+            background: #4ADE80 !important;
+            color: #000000 !important;
+        }
+
         #lms-solver-floating-menu {
             position: fixed !important;
             bottom: 68px !important;
-            right: 24px !important;
+            right: 22px !important;
             background: #FAF7F2 !important;
             border: 2.5px solid #000000 !important;
-            border-radius: 14px !important;
+            border-radius: 12px !important;
             box-shadow: 5px 5px 0px #000000 !important;
-            padding: 8px !important;
+            padding: 10px !important;
             display: flex !important;
             flex-direction: column !important;
-            gap: 5px !important;
+            gap: 6px !important;
             z-index: 9999998 !important;
-            min-width: 210px !important;
+            width: 248px !important;
             animation: lmsSolverModalPop 0.2s ease-out forwards !important;
+        }
+        .lms-fmenu-heading {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            font-size: 11px !important;
+            font-weight: 900 !important;
+            color: #000000 !important;
+            padding: 0 2px 4px 2px !important;
+            border-bottom: 2px solid #000000 !important;
+            margin-bottom: 2px !important;
+        }
+        .lms-fmenu-badge {
+            font-size: 8.5px !important;
+            font-weight: 900 !important;
+            background: #000000 !important;
+            color: #FFFFFF !important;
+            padding: 2px 6px !important;
+            border-radius: 5px !important;
         }
         .lms-floating-menu-item {
             background: #FFFFFF !important;
-            border: 1.5px solid #000000 !important;
-            border-radius: 8px !important;
-            padding: 8px 10px !important;
+            border: 2px solid #000000 !important;
+            border-radius: 9px !important;
+            padding: 7px 9px !important;
             font-size: 11.5px !important;
             font-weight: 800 !important;
-            font-family: inherit !important;
             cursor: pointer !important;
             display: flex !important;
             align-items: center !important;
             gap: 8px !important;
-            color: #111827 !important;
-            box-shadow: 1.5px 1.5px 0px #000000 !important;
+            color: #000000 !important;
+            box-shadow: 2.5px 2.5px 0px #000000 !important;
             transition: all 0.1s ease !important;
+            text-align: left !important;
+            width: 100% !important;
         }
         .lms-floating-menu-item:hover {
-            background: #FFDE59 !important;
-            transform: translate(-1px, -1px) !important;
-            box-shadow: 2.5px 2.5px 0px #000000 !important;
+            background: #FFF0A8 !important;
+            transform: translate(-1.5px, -1.5px) !important;
+            box-shadow: 3.5px 3.5px 0px #000000 !important;
         }
+        .lms-floating-menu-item:active {
+            transform: translate(1.5px, 1.5px) !important;
+            box-shadow: 1px 1px 0px #000000 !important;
+        }
+        .lms-fmenu-icon {
+            width: 24px !important;
+            height: 24px !important;
+            border: 1.5px solid #000000 !important;
+            border-radius: 6px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            color: #000000 !important;
+        }
+        .lms-fmenu-icon.green { background: #4ADE80 !important; }
+        .lms-fmenu-icon.yellow { background: #FFDE59 !important; }
+        .lms-fmenu-icon.purple { background: #818CF8 !important; }
+        .lms-fmenu-icon.pink { background: #FF6B8B !important; }
 
-        /* In-Page Toast Notification */
+        /* In-Page Toast Banner (matches #toastBanner in popup.html) */
         #lms-inpage-toast {
             position: fixed !important;
-            bottom: 80px !important;
+            top: 18px !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
-            background: #111827 !important;
+            background: #000000 !important;
             color: #FFFFFF !important;
-            border: 2px solid #000000 !important;
-            border-radius: 10px !important;
-            padding: 8px 16px !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
-            font-size: 12px !important;
+            border: 2px solid #FFDE59 !important;
+            border-radius: 20px !important;
+            padding: 8px 15px !important;
+            font-size: 11.5px !important;
             font-weight: 800 !important;
-            box-shadow: 4px 4px 0px #000000 !important;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.45) !important;
             z-index: 999999999 !important;
-            display: flex !important;
+            display: inline-flex !important;
             align-items: center !important;
-            gap: 8px !important;
+            gap: 7px !important;
             pointer-events: none !important;
-            animation: lmsSolverModalPop 0.2s ease-out forwards !important;
+            animation: lmsSolverFadeIn 0.2s ease-out forwards !important;
         }
     `;
     document.head.appendChild(style);
@@ -843,8 +1288,34 @@ function triggerClickFx(element, color = '#22C55E') {
 
 
 // ========================================================
-// 2B. IN-PAGE OVERLAY MODALS & QUICK CONTROLLERS (v2.8)
+// 2B. IN-PAGE OVERLAY MODALS & QUICK CONTROLLERS (Tuckii UI)
 // ========================================================
+const LMS_ICONS = {
+    bolt: (s = 14) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+    cpu: (s = 14) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>`,
+    award: (s = 14) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`,
+    fileDown: (s = 18) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>`,
+    target: (s = 18) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+    fileText: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+    fileWord: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13l2 4 2-4"/><line x1="15" y1="13" x2="15" y2="17"/></svg>`,
+    image: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+    play: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+    copy: (s = 14) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+    clipboard: (s = 13) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>`,
+    trash: (s = 13) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+    checkCircle: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+    check: (s = 14) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    alertTriangle: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    eye: (s = 13) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+    arrowUpRight: (s = 13) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>`,
+    arrowRight: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+    download: (s = 14) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+    info: (s = 13) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+    close: (s = 15) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+    layers: (s = 12) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
+    clock: (s = 14) => `<svg class="lms-neo-svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+};
+
 function escapeHtml(text) {
     if (!text) return "";
     return String(text)
@@ -856,13 +1327,15 @@ function escapeHtml(text) {
 }
 
 function showInPageToast(message, type = "success") {
+    ensureInjectedStyles();
     let oldToast = document.getElementById('lms-inpage-toast');
     if (oldToast) oldToast.remove();
 
     const toast = document.createElement('div');
     toast.id = 'lms-inpage-toast';
-    toast.style.background = type === "success" ? "#111827" : (type === "warning" ? "#854D0E" : "#DC2626");
-    toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+    toast.style.borderColor = type === "success" ? "#FFDE59" : (type === "warning" ? "#FFDE59" : "#FF4757");
+    const iconSvg = type === "success" ? LMS_ICONS.check(14) : LMS_ICONS.alertTriangle(14);
+    toast.innerHTML = `${iconSvg}<span>${escapeHtml(message)}</span>`;
     document.body.appendChild(toast);
 
     setTimeout(() => {
@@ -971,7 +1444,7 @@ async function generatePdfDocument(structuredData) {
     y += 6.5;
 
     // Rules / Prompt instructions
-    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: 1. a. Jawaban (sertakan huruf opsi a/b/c/d jika ada)";
+    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: Jika opsi ada huruf (a/b/c/d), tulis `1. a. Jawaban`. Jika tanpa huruf opsi (misal True/False), tulis langsung `1. False`.";
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8.5);
     doc.setTextColor(75, 85, 99);
@@ -1121,7 +1594,7 @@ async function generateDocxDocument(structuredData) {
     );
 
     // Aturan & Petunjuk Jawaban untuk AI
-    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: 1. a. Jawaban (sertakan huruf opsi a/b/c/d jika ada)";
+    const promptHeader = structuredData.promptHeader || "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\nFormat: Jika opsi ada huruf (a/b/c/d), tulis `1. a. Jawaban`. Jika tanpa huruf opsi (misal True/False), tulis langsung `1. False`.";
     promptHeader.split('\n').forEach(line => {
         if (line.trim()) {
             docChildren.push(
@@ -1411,166 +1884,670 @@ function closeInPageModals() {
     if (overlay) overlay.remove();
 }
 
-// ========================================================
-// IN-PAGE MODAL 1: SALIN / EKSPOR HASIL SCRAPING SOAL
-// ========================================================
-function showInPageScrapeResultModal(finalResult, structuredData) {
-    ensureInjectedStyles();
-    closeInPageModals();
+// Generator PDF & DOCX khusus untuk Laporan Hasil Review Kuis
+async function generateReviewPdfDocument(reviewData) {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        showInPageToast("Pustaka PDF belum termuat!", "error");
+        return false;
+    }
 
-    const hasImages = structuredData && structuredData.hasImages && structuredData.totalImages > 0;
-    const totalImages = structuredData ? (structuredData.totalImages || 0) : 0;
-    const qCount = (structuredData && structuredData.questions) ? structuredData.questions.length : 0;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 14;
+    const contentWidth = pageWidth - (margin * 2);
+    let y = margin;
 
-    const overlay = document.createElement('div');
-    overlay.id = 'lms-solver-modal-overlay';
+    function checkPageBreak(neededHeight) {
+        if (y + neededHeight > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+            return true;
+        }
+        return false;
+    }
 
+    // Header Judul
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13.5);
+    doc.setTextColor(17, 24, 39);
+    doc.text("LAPORAN HASIL & KUNCI JAWABAN KUIS LMS", margin, y);
+    y += 6.5;
+
+    // Box Ringkasan Nilai
+    const sum = reviewData.summary || {};
+    const metaLines = [];
+    if (sum.grade) metaLines.push(`Nilai Akhir: ${sum.grade}`);
+    if (sum.marks) metaLines.push(`Total Poin: ${sum.marks}`);
+    if (sum.status) metaLines.push(`Status: ${sum.status}`);
+    if (sum.duration) metaLines.push(`Durasi: ${sum.duration}`);
+    if (sum.completed) metaLines.push(`Selesai: ${sum.completed}`);
+    metaLines.push(`Statistik: ${reviewData.totalQuestions || 0} Soal (${reviewData.correctCount || 0} Benar, ${reviewData.incorrectCount || 0} Salah)`);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(55, 65, 81);
+    metaLines.forEach(line => {
+        checkPageBreak(4.5);
+        doc.text(line, margin, y);
+        y += 4.3;
+    });
+    y += 2;
+
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 6;
+
+    const questions = reviewData.questions || [];
+    for (const q of questions) {
+        checkPageBreak(20);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        if (q.isCorrect) doc.setTextColor(22, 101, 52);
+        else doc.setTextColor(185, 28, 28);
+        const statusTag = q.isCorrect ? "[BENAR]" : "[SALAH]";
+        doc.text(`Soal No. ${q.number} ${statusTag} ${q.grade ? `(${q.grade})` : ""}`, margin, y);
+        y += 5;
+
+        // Teks Pertanyaan
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9.5);
+        doc.setTextColor(17, 24, 39);
+        const qLines = doc.splitTextToSize(q.text || "", contentWidth);
+        qLines.forEach(line => {
+            checkPageBreak(4.6);
+            doc.text(line, margin, y);
+            y += 4.4;
+        });
+        y += 2;
+
+        // Gambar Soal jika ada
+        if (q.images && q.images.length > 0) {
+            for (const img of q.images) {
+                if (img.base64) {
+                    const compat = await ensureCompatibleImageDataUrl(img.base64);
+                    if (compat) {
+                        const maxImgW = contentWidth;
+                        const maxImgH = 75;
+                        let imgW = maxImgW;
+                        let imgH = maxImgH;
+                        if (img.width && img.height) {
+                            const ratio = img.width / img.height;
+                            imgW = Math.min(maxImgW, img.width * 0.264583);
+                            imgH = imgW / ratio;
+                            if (imgH > maxImgH) {
+                                imgH = maxImgH;
+                                imgW = imgH * ratio;
+                            }
+                        }
+                        checkPageBreak(imgH + 5);
+                        try {
+                            const imgX = margin + (contentWidth - imgW) / 2;
+                            doc.addImage(compat.dataUrl, compat.format, imgX, y, imgW, imgH);
+                            y += imgH + 4;
+                        } catch (e) {}
+                    }
+                }
+            }
+        }
+
+        // Opsi atau Pasangan Menjodohkan
+        if (q.isMatch && q.matchDetails && q.matchDetails.length > 0) {
+            doc.setFontSize(9);
+            q.matchDetails.forEach(m => {
+                const tag = m.isRowCorrect ? "[BENAR]" : "[SALAH]";
+                const rowStr = m.isRowCorrect
+                    ? `${tag} ${m.letter}. ${m.sub} -> ${m.correct}`
+                    : `${tag} ${m.letter}. ${m.sub} -> ${m.chosen || '(Kosong)'} (Kunci: ${m.correct})`;
+                doc.setTextColor(m.isRowCorrect ? 22 : 185, m.isRowCorrect ? 101 : 28, m.isRowCorrect ? 52 : 28);
+                const rLines = doc.splitTextToSize(rowStr, contentWidth - 4);
+                rLines.forEach(rl => {
+                    checkPageBreak(4.4);
+                    doc.text(rl, margin + 2, y);
+                    y += 4.2;
+                });
+            });
+            y += 1.5;
+        } else if (q.options && q.options.length > 0) {
+            doc.setFontSize(9);
+            q.options.forEach(opt => {
+                let prefix = "   ";
+                if (opt.isCorrect && opt.isSelected) {
+                    prefix = "[BENAR - DIPILIH] ";
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(22, 101, 52);
+                } else if (opt.isCorrect) {
+                    prefix = "[KUNCI BENAR] ";
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(22, 101, 52);
+                } else if (opt.isSelected) {
+                    prefix = "[SALAH - DIPILIH] ";
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(185, 28, 28);
+                } else {
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(75, 85, 99);
+                }
+                const optLabel = opt.letter ? `${opt.letter}. ` : "- ";
+                const optLines = doc.splitTextToSize(`${prefix}${optLabel}${opt.text}`, contentWidth - 4);
+                optLines.forEach(ol => {
+                    checkPageBreak(4.3);
+                    doc.text(ol, margin + 2, y);
+                    y += 4.1;
+                });
+            });
+            y += 1.5;
+        }
+
+        // Kunci Jawaban Baris Ringkas
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9.2);
+        doc.setTextColor(6, 95, 70);
+        const keyStr = `Kunci Jawaban: ${q.reportKey || q.correctAnswer || '(Belum terdeteksi)'}`;
+        const keyLines = doc.splitTextToSize(keyStr, contentWidth);
+        keyLines.forEach(kl => {
+            checkPageBreak(4.5);
+            doc.text(kl, margin, y);
+            y += 4.3;
+        });
+
+        if (!q.isCorrect && q.studentAnswer) {
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(185, 28, 28);
+            const stuStr = `Jawaban Anda: ${q.studentLetter ? q.studentLetter + '. ' : ''}${q.studentAnswer}`;
+            const stuLines = doc.splitTextToSize(stuStr, contentWidth);
+            stuLines.forEach(sl => {
+                checkPageBreak(4.5);
+                doc.text(sl, margin, y);
+                y += 4.3;
+            });
+        }
+
+        y += 3;
+        checkPageBreak(5);
+        doc.setDrawColor(229, 231, 235);
+        doc.setLineWidth(0.25);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 5;
+    }
+
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+        doc.setPage(p);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(156, 163, 175);
+        doc.text(`Halaman ${p} dari ${totalPages}  |  Laporan LMS QUIZ Solver`, margin, pageHeight - 8);
+    }
+
+    doc.save('Laporan_Hasil_Kuis_LMS.pdf');
+    return true;
+}
+
+async function generateReviewDocxDocument(reviewData) {
+    if (!window.docx) {
+        showInPageToast("Pustaka DOCX belum termuat!", "error");
+        return false;
+    }
+
+    const { Document, Paragraph, TextRun, ImageRun, Packer, AlignmentType, BorderStyle } = window.docx;
+    const children = [];
+
+    children.push(
+        new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 80, after: 160 },
+            children: [
+                new TextRun({
+                    text: "LAPORAN HASIL & KUNCI JAWABAN KUIS LMS",
+                    bold: true,
+                    size: 30,
+                    font: "Calibri",
+                    color: "111827"
+                })
+            ]
+        })
+    );
+
+    const sum = reviewData.summary || {};
+    const metaItems = [];
+    if (sum.grade) metaItems.push(`Nilai Akhir: ${sum.grade}`);
+    if (sum.marks) metaItems.push(`Total Poin: ${sum.marks}`);
+    if (sum.status) metaItems.push(`Status: ${sum.status}`);
+    if (sum.duration) metaItems.push(`Waktu Kerja: ${sum.duration}`);
+    if (sum.completed) metaItems.push(`Selesai: ${sum.completed}`);
+    metaItems.push(`Statistik: ${reviewData.totalQuestions || 0} Soal (${reviewData.correctCount || 0} Benar, ${reviewData.incorrectCount || 0} Salah)`);
+
+    metaItems.forEach(m => {
+        children.push(
+            new Paragraph({
+                spacing: { after: 50 },
+                children: [new TextRun({ text: m, size: 20, font: "Calibri", color: "374151", bold: m.startsWith("Nilai") || m.startsWith("Statistik") })]
+            })
+        );
+    });
+
+    children.push(
+        new Paragraph({
+            border: { bottom: { color: "000000", space: 6, style: BorderStyle.SINGLE, size: 8 } },
+            spacing: { after: 200 }
+        })
+    );
+
+    const questions = reviewData.questions || [];
+    for (const q of questions) {
+        children.push(
+            new Paragraph({
+                spacing: { before: 140, after: 70 },
+                children: [
+                    new TextRun({
+                        text: `Soal No. ${q.number} ${q.isCorrect ? "[BENAR]" : "[SALAH]"} ${q.grade ? `(${q.grade})` : ""}`,
+                        bold: true,
+                        size: 23,
+                        font: "Calibri",
+                        color: q.isCorrect ? "166534" : "B91C1C"
+                    })
+                ]
+            })
+        );
+
+        if (q.text) {
+            q.text.split('\n').forEach(line => {
+                if (line.trim()) {
+                    children.push(
+                        new Paragraph({
+                            spacing: { after: 70 },
+                            children: [new TextRun({ text: line, size: 21, font: "Calibri", color: "111827" })]
+                        })
+                    );
+                }
+            });
+        }
+
+        if (q.images && q.images.length > 0) {
+            for (const img of q.images) {
+                if (img.base64) {
+                    try {
+                        const compat = await ensureCompatibleImageDataUrl(img.base64);
+                        if (compat) {
+                            const imgBytes = base64ToUint8Array(compat.dataUrl);
+                            let w = img.width || 420;
+                            let h = img.height || 240;
+                            if (w > 460) { h = Math.round(h * (460 / w)); w = 460; }
+                            if (h > 300) { w = Math.round(w * (300 / h)); h = 300; }
+                            children.push(
+                                new Paragraph({
+                                    alignment: AlignmentType.CENTER,
+                                    spacing: { before: 80, after: 120 },
+                                    children: [new ImageRun({ data: imgBytes, transformation: { width: Math.max(50, w), height: Math.max(30, h) } })]
+                                })
+                            );
+                        }
+                    } catch (e) {}
+                }
+            }
+        }
+
+        if (q.isMatch && q.matchDetails && q.matchDetails.length > 0) {
+            q.matchDetails.forEach(m => {
+                const rowText = m.isRowCorrect
+                    ? `[BENAR] ${m.letter}. ${m.sub} -> ${m.correct}`
+                    : `[SALAH] ${m.letter}. ${m.sub} -> ${m.chosen || '(Kosong)'} (Kunci: ${m.correct})`;
+                children.push(
+                    new Paragraph({
+                        spacing: { after: 45 },
+                        indent: { left: 320 },
+                        children: [new TextRun({ text: rowText, size: 20, font: "Calibri", bold: m.isRowCorrect, color: m.isRowCorrect ? "166534" : "B91C1C" })]
+                    })
+                );
+            });
+        } else if (q.options && q.options.length > 0) {
+            q.options.forEach(opt => {
+                let tag = "";
+                let color = "374151";
+                let isBold = false;
+                if (opt.isCorrect && opt.isSelected) { tag = "[BENAR - DIPILIH] "; color = "166534"; isBold = true; }
+                else if (opt.isCorrect) { tag = "[KUNCI BENAR] "; color = "166534"; isBold = true; }
+                else if (opt.isSelected) { tag = "[SALAH - DIPILIH] "; color = "B91C1C"; }
+                const optLabel = opt.letter ? `${opt.letter}. ` : "- ";
+                children.push(
+                    new Paragraph({
+                        spacing: { after: 45 },
+                        indent: { left: 320 },
+                        children: [new TextRun({ text: `${tag}${optLabel}${opt.text}`, size: 20, font: "Calibri", bold: isBold, color: color })]
+                    })
+                );
+            });
+        }
+
+        children.push(
+            new Paragraph({
+                spacing: { before: 60, after: 60 },
+                children: [
+                    new TextRun({
+                        text: `Kunci Jawaban: ${q.reportKey || q.correctAnswer || '(Belum terdeteksi)'}`,
+                        bold: true,
+                        size: 21,
+                        font: "Calibri",
+                        color: "065F46"
+                    })
+                ]
+            })
+        );
+
+        if (!q.isCorrect && q.studentAnswer) {
+            children.push(
+                new Paragraph({
+                    spacing: { after: 60 },
+                    children: [
+                        new TextRun({
+                            text: `Jawaban Anda: ${q.studentLetter ? q.studentLetter + '. ' : ''}${q.studentAnswer} (Salah)`,
+                            size: 20,
+                            font: "Calibri",
+                            color: "B91C1C"
+                        })
+                    ]
+                })
+            );
+        }
+
+        children.push(
+            new Paragraph({
+                border: { bottom: { color: "E5E7EB", space: 4, style: BorderStyle.SINGLE, size: 4 } },
+                spacing: { after: 140 }
+            })
+        );
+    }
+
+    const doc = new Document({
+        sections: [{ properties: { page: { margin: { top: 1200, right: 1200, bottom: 1200, left: 1200 } } }, children }]
+    });
+
+    const blob = await Packer.toBlob(doc);
+    downloadBlob(blob, 'Laporan_Hasil_Kuis_LMS.docx');
+    return true;
+}
+
+// Helper Header + Mode Switcher Bar (Tuckii Popup Shell)
+function buildInPageModalShell(activeMode, bodyHtml, footerHtml = "") {
     let devilIcon = '';
     try {
         devilIcon = chrome.runtime.getURL('asset/devil-svgrepo-com.svg');
     } catch (e) {}
 
-    overlay.innerHTML = `
-        <div class="lms-neo-modal" id="lms-modal-scrape-result">
-            <div class="lms-modal-header">
-                <div class="lms-modal-title">
-                    ${devilIcon ? `<img src="${devilIcon}" style="width:18px;height:18px;vertical-align:middle;" alt="icon">` : '📋'}
-                    <span>HASIL SCRAPING KUIS</span>
+    const isReviewPage = window.location.href.includes('review.php');
+    const isAttemptPage = window.location.href.includes('attempt.php');
+    const dotClass = isReviewPage ? 'pink' : (isAttemptPage ? '' : 'yellow');
+    const pageLabel = isReviewPage ? 'Mode Review Kuis Aktif' : (isAttemptPage ? 'Mode Attempt Kuis Aktif' : 'Halaman Kuis LMS');
+
+    return `
+        <div class="lms-neo-modal">
+            <div class="lms-modal-topbar">
+                <div class="lms-hero-brand">
+                    <div class="lms-hero-logo-box">
+                        ${devilIcon ? `<img src="${devilIcon}" style="width:24px;height:24px;display:block;" alt="Logo">` : LMS_ICONS.bolt(20)}
+                    </div>
+                    <div class="lms-hero-title-wrap">
+                        <h3 class="lms-hero-title">LMS QUIZ Solver.</h3>
+                        <div class="lms-hero-sub">
+                            <span class="lms-status-dot ${dotClass}"></span>
+                            <span>${pageLabel}</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="lms-modal-header-right">
-                    <span class="lms-modal-badge yellow">${qCount} SOAL</span>
-                    ${hasImages ? `<span class="lms-modal-badge pink">${totalImages} GAMBAR</span>` : ''}
-                    <button class="lms-modal-close-btn" id="lms-close-scrape-modal" title="Tutup">✕</button>
-                </div>
+                <button class="lms-icon-btn" id="lms-modal-close-x" title="Tutup Popup">
+                    ${LMS_ICONS.close(16)}
+                </button>
+            </div>
+
+            <div class="lms-mode-nav">
+                <button class="lms-mode-tab ${activeMode === 'attempt' ? 'active-attempt' : ''}" id="lms-nav-attempt">
+                    ${LMS_ICONS.bolt(12)}
+                    <span>01. Scrape</span>
+                </button>
+                <button class="lms-mode-tab ${activeMode === 'inject' ? 'active-inject' : ''}" id="lms-nav-inject">
+                    ${LMS_ICONS.cpu(12)}
+                    <span>02. Injector</span>
+                </button>
+                <button class="lms-mode-tab ${activeMode === 'review' ? 'active-review' : ''}" id="lms-nav-review">
+                    ${LMS_ICONS.award(12)}
+                    <span>03. Review</span>
+                </button>
             </div>
 
             <div class="lms-modal-body">
-                ${hasImages ? `
-                    <div class="lms-modal-alert warning">
-                        <span style="font-size:18px;">⚠️</span>
-                        <div>
-                            <strong>Terdeteksi ${totalImages} Soal Bergambar!</strong><br>
-                            Sangat disarankan mengunduh dalam format <b>.DOCX</b> atau <b>.PDF</b> agar AI dapat menganalisis gambar dengan akurat.
-                        </div>
-                    </div>
-
-                    <div class="lms-modal-actions-container">
-                        <button class="lms-neo-btn primary-yellow" id="lms-btn-modal-docx">
-                            <span>📄 Unduh File Word (.DOCX) — Rekomendasi Gambar</span>
-                        </button>
-                        <div class="lms-btn-row">
-                            <button class="lms-neo-btn secondary-purple" id="lms-btn-modal-pdf">
-                                <span>📑 Unduh PDF</span>
-                            </button>
-                            <button class="lms-neo-btn secondary-green" id="lms-btn-modal-copy">
-                                <span>📋 Salin Teks Prompt</span>
-                            </button>
-                        </div>
-                        <button class="lms-neo-btn secondary-white" id="lms-btn-modal-zip" style="margin-top:2px;">
-                            <span>📦 Unduh Semua Gambar Soal (.ZIP)</span>
-                        </button>
-                    </div>
-                ` : `
-                    <div class="lms-modal-alert success">
-                        <span style="font-size:18px;">✅</span>
-                        <div>
-                            <strong>${qCount} Soal Berhasil Discrape (Hanya Teks)!</strong><br>
-                            Format prompt AI sudah dibuat otomatis. Anda bisa langsung salin teks dan tempel ke ChatGPT/Gemini/Claude.
-                        </div>
-                    </div>
-
-                    <div class="lms-modal-actions-container">
-                        <button class="lms-neo-btn primary-green" id="lms-btn-modal-copy">
-                            <span>📋 Salin Teks Prompt AI (Default)</span>
-                        </button>
-                        <div class="lms-btn-row">
-                            <button class="lms-neo-btn secondary-purple" id="lms-btn-modal-pdf">
-                                <span>📑 Unduh PDF</span>
-                            </button>
-                            <button class="lms-neo-btn secondary-yellow" id="lms-btn-modal-docx">
-                                <span>📄 Unduh DOCX</span>
-                            </button>
-                        </div>
-                    </div>
-                `}
-
-                <div class="lms-preview-box">
-                    <div class="lms-preview-header">
-                        <span>Cuplikan Prompt &amp; Soal:</span>
-                        <span>${finalResult.length} Karakter</span>
-                    </div>
-                    <pre class="lms-preview-content">${escapeHtml(finalResult.slice(0, 340))}...</pre>
-                </div>
+                ${bodyHtml}
             </div>
 
-            <div class="lms-modal-footer">
-                <button class="lms-neo-btn secondary-white" id="lms-btn-to-paste-modal" style="width:100%;">
-                    <span>⏩ Lanjut ke Paste Jawaban AI &rarr;</span>
+            ${footerHtml ? `<div class="lms-modal-footer">${footerHtml}</div>` : ''}
+        </div>
+    `;
+}
+
+function attachModalNavHandlers(overlay) {
+    const closeBtn = overlay.querySelector('#lms-modal-close-x');
+    if (closeBtn) closeBtn.onclick = () => closeInPageModals();
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeInPageModals();
+    });
+
+    const navAttempt = overlay.querySelector('#lms-nav-attempt');
+    if (navAttempt) {
+        navAttempt.onclick = () => {
+            chrome.storage.local.get(['scrapeResult', 'scrapeStructuredData'], (d) => {
+                showInPageScrapeResultModal(d.scrapeResult || "", d.scrapeStructuredData || null);
+            });
+        };
+    }
+
+    const navInject = overlay.querySelector('#lms-nav-inject');
+    if (navInject) {
+        navInject.onclick = () => showInPagePasteModal();
+    }
+
+    const navReview = overlay.querySelector('#lms-nav-review');
+    if (navReview) {
+        navReview.onclick = () => showInPageReviewModal();
+    }
+}
+
+// ========================================================
+// IN-PAGE MODAL 1: 01. ATTEMPT - AUTO-SCRAPE & EKSPOR SOAL
+// ========================================================
+function showInPageScrapeResultModal(finalResult, structuredData) {
+    ensureInjectedStyles();
+    closeInPageModals();
+
+    const hasResult = Boolean(finalResult && finalResult.trim().length > 0);
+    const hasImages = Boolean(structuredData && structuredData.hasImages && structuredData.totalImages > 0);
+    const totalImages = structuredData ? (structuredData.totalImages || 0) : 0;
+    const qCount = (structuredData && structuredData.questions) ? structuredData.questions.length : 0;
+
+    let cardContent = '';
+    if (!hasResult) {
+        cardContent = `
+            <button class="lms-neo-btn btn-green" id="lms-btn-run-scrape-now">
+                ${LMS_ICONS.play(15)}
+                <span>1. Mulai Auto-Scrape Sekarang</span>
+            </button>
+        `;
+    } else if (hasImages) {
+        cardContent = `
+            <div class="lms-scrape-alert pink">
+                ${LMS_ICONS.image(16)}
+                <span>Terdeteksi ${totalImages} Gambar pada Soal — Unduh .DOCX atau .PDF agar gambar terbaca AI.</span>
+            </div>
+
+            <div class="lms-btn-group-row" style="margin-top:0 !important;">
+                <button class="lms-neo-btn btn-yellow" id="lms-btn-modal-pdf">
+                    ${LMS_ICONS.fileText(15)}
+                    <span>Unduh .PDF</span>
                 </button>
+                <button class="lms-neo-btn btn-purple" id="lms-btn-modal-docx">
+                    ${LMS_ICONS.fileWord(15)}
+                    <span>Unduh .DOCX</span>
+                </button>
+            </div>
+
+            <button class="lms-neo-btn btn-white" id="lms-btn-modal-zip" style="margin-top:8px;">
+                ${LMS_ICONS.image(15)}
+                <span>Unduh Semua Gambar (${totalImages} File .ZIP)</span>
+            </button>
+
+            <button class="lms-neo-btn btn-white" id="lms-btn-modal-copy" style="margin-top:8px;">
+                ${LMS_ICONS.copy(14)}
+                <span>Salin Teks Saja</span>
+            </button>
+
+            <div class="lms-preview-box">
+                <div class="lms-preview-header">
+                    <span>Cuplikan Prompt &amp; Soal</span>
+                    <span>${finalResult.length} Karakter</span>
+                </div>
+                <pre class="lms-preview-content">${escapeHtml(finalResult.slice(0, 320))}...</pre>
+            </div>
+        `;
+    } else {
+        cardContent = `
+            <div class="lms-scrape-alert green">
+                ${LMS_ICONS.checkCircle(16)}
+                <span>Kuis Siap (${qCount} Soal Hanya Teks) — Prompt AI sudah diformat otomatis.</span>
+            </div>
+
+            <button class="lms-neo-btn btn-green" id="lms-btn-modal-copy">
+                ${LMS_ICONS.copy(15)}
+                <span>Salin Teks Soal (Default)</span>
+            </button>
+
+            <div class="lms-btn-group-row">
+                <button class="lms-neo-btn btn-yellow" id="lms-btn-modal-pdf">
+                    ${LMS_ICONS.fileText(15)}
+                    <span>Unduh .PDF</span>
+                </button>
+                <button class="lms-neo-btn btn-purple" id="lms-btn-modal-docx">
+                    ${LMS_ICONS.fileWord(15)}
+                    <span>Unduh .DOCX</span>
+                </button>
+            </div>
+
+            <div class="lms-preview-box">
+                <div class="lms-preview-header">
+                    <span>Cuplikan Prompt &amp; Soal</span>
+                    <span>${finalResult.length} Karakter</span>
+                </div>
+                <pre class="lms-preview-content">${escapeHtml(finalResult.slice(0, 320))}...</pre>
+            </div>
+        `;
+    }
+
+    const bodyHtml = `
+        <div class="lms-folder-card card-attempt">
+            <div class="lms-folder-tab">
+                ${LMS_ICONS.bolt(11)}
+                <span>01. ATTEMPT</span>
+            </div>
+            <div class="lms-folder-card-body">
+                <div class="lms-card-header-row">
+                    <div class="lms-card-icon-box">
+                        ${LMS_ICONS.fileDown(20)}
+                    </div>
+                    <div class="lms-card-meta-pill">
+                        <span>Multi-Page</span>
+                        ${hasResult ? `<span class="lms-badge-pill">${qCount} SOAL</span>` : ''}
+                    </div>
+                </div>
+                <h3 class="lms-card-title">Auto-Scrape Soal</h3>
+                <p class="lms-card-desc">Salin teks prompt atau unduh dokumen soal kuis. Hasil tetap tersimpan di ekstensi.</p>
+                ${cardContent}
             </div>
         </div>
     `;
 
-    document.body.appendChild(overlay);
+    const footerHtml = hasResult ? `
+        <button class="lms-neo-btn btn-purple" id="lms-btn-to-paste-modal">
+            <span>Lanjut ke Auto-Fill Jawaban</span>
+            ${LMS_ICONS.arrowRight(15)}
+        </button>
+    ` : '';
 
-    // Event listener: Copy Text
+    const overlay = document.createElement('div');
+    overlay.id = 'lms-solver-modal-overlay';
+    overlay.innerHTML = buildInPageModalShell('attempt', bodyHtml, footerHtml);
+    document.body.appendChild(overlay);
+    attachModalNavHandlers(overlay);
+
+    const btnRunScrape = overlay.querySelector('#lms-btn-run-scrape-now');
+    if (btnRunScrape) {
+        btnRunScrape.onclick = () => {
+            if (!window.location.href.includes('attempt.php')) {
+                showInPageToast("Buka halaman attempt.php terlebih dahulu untuk scrape soal!", "warning");
+                return;
+            }
+            closeInPageModals();
+            chrome.storage.local.set({ isAutoScraping: true, scrapedQuestions: "", scrapedQuestionsData: [] }, () => {
+                performScrapeStep();
+            });
+        };
+    }
+
     const btnCopy = overlay.querySelector('#lms-btn-modal-copy');
     if (btnCopy) {
         btnCopy.onclick = async () => {
             const ok = await copyToClipboard(finalResult);
             if (ok) {
-                btnCopy.style.background = '#22C55E';
-                btnCopy.innerHTML = '<span>✅ Berhasil Disalin ke Clipboard!</span>';
-                showInPageToast("Teks kuis tersalin! Menuju input jawaban AI...");
+                btnCopy.className = 'lms-neo-btn btn-green';
+                btnCopy.innerHTML = `${LMS_ICONS.check(15)}<span>Berhasil Disalin ke Clipboard!</span>`;
+                showInPageToast("Teks soal tersalin! Membuka form Auto-Fill...");
             }
             setTimeout(() => {
                 closeInPageModals();
                 showInPagePasteModal();
-            }, 450);
+            }, 380);
         };
     }
 
-    // Event listener: Download DOCX
     const btnDocx = overlay.querySelector('#lms-btn-modal-docx');
     if (btnDocx) {
         btnDocx.onclick = async () => {
             btnDocx.disabled = true;
-            btnDocx.innerHTML = '<span>⏳ Menyiapkan File DOCX...</span>';
+            btnDocx.innerHTML = `${LMS_ICONS.clock(14)}<span>Menyiapkan .DOCX...</span>`;
             try {
                 await generateDocxDocument(structuredData);
                 showInPageToast("File DOCX berhasil diunduh!");
             } catch (e) {
                 console.error("Gagal buat DOCX:", e);
-                showInPageToast("Gagal membuat DOCX!", "error");
+                showInPageToast("Gagal membuat file DOCX!", "error");
             }
             setTimeout(() => {
                 closeInPageModals();
                 showInPagePasteModal();
-            }, 600);
+            }, 500);
         };
     }
 
-    // Event listener: Download PDF
     const btnPdf = overlay.querySelector('#lms-btn-modal-pdf');
     if (btnPdf) {
         btnPdf.onclick = async () => {
             btnPdf.disabled = true;
-            btnPdf.innerHTML = '<span>⏳ Menyiapkan File PDF...</span>';
+            btnPdf.innerHTML = `${LMS_ICONS.clock(14)}<span>Menyiapkan .PDF...</span>`;
             try {
                 await generatePdfDocument(structuredData);
                 showInPageToast("File PDF berhasil diunduh!");
             } catch (e) {
                 console.error("Gagal buat PDF:", e);
-                showInPageToast("Gagal membuat PDF!", "error");
+                showInPageToast("Gagal membuat file PDF!", "error");
             }
             setTimeout(() => {
                 closeInPageModals();
                 showInPagePasteModal();
-            }, 600);
+            }, 500);
         };
     }
 
-    // Event listener: Download ZIP
     const btnZip = overlay.querySelector('#lms-btn-modal-zip');
     if (btnZip) {
         btnZip.onclick = async () => {
@@ -1578,11 +2555,10 @@ function showInPageScrapeResultModal(finalResult, structuredData) {
             setTimeout(() => {
                 closeInPageModals();
                 showInPagePasteModal();
-            }, 600);
+            }, 500);
         };
     }
 
-    // Event listener: Lanjut ke Paste Modal
     const btnToPaste = overlay.querySelector('#lms-btn-to-paste-modal');
     if (btnToPaste) {
         btnToPaste.onclick = () => {
@@ -1590,18 +2566,10 @@ function showInPageScrapeResultModal(finalResult, structuredData) {
             showInPagePasteModal();
         };
     }
-
-    // Event listener: Tutup Modal
-    const btnClose = overlay.querySelector('#lms-close-scrape-modal');
-    if (btnClose) {
-        btnClose.onclick = () => {
-            closeInPageModals();
-        };
-    }
 }
 
 // ========================================================
-// IN-PAGE MODAL 2: PASTE / INPUT JAWABAN AI UNTUK DIINJECT
+// IN-PAGE MODAL 2: 02. INJECTOR - PASTE & AUTO-FILL JAWABAN
 // ========================================================
 function showInPagePasteModal() {
     ensureInjectedStyles();
@@ -1609,66 +2577,74 @@ function showInPagePasteModal() {
 
     chrome.storage.local.get(['savedAnswers'], (data) => {
         const draftAnswers = data.savedAnswers || "";
-        const overlay = document.createElement('div');
-        overlay.id = 'lms-solver-modal-overlay';
 
-        overlay.innerHTML = `
-            <div class="lms-neo-modal" id="lms-modal-paste-answer" style="max-width:540px;">
-                <div class="lms-modal-header">
-                    <div class="lms-modal-title">
-                        <span style="font-size:18px;">🤖</span>
-                        <span>INPUT JAWABAN AI</span>
-                    </div>
-                    <div class="lms-modal-header-right">
-                        <span class="lms-modal-badge green">AUTO-FILL READY</span>
-                        <button class="lms-modal-close-btn" id="lms-close-paste-modal" title="Tutup">✕</button>
-                    </div>
+        const bodyHtml = `
+            <div class="lms-folder-card card-inject">
+                <div class="lms-folder-tab">
+                    ${LMS_ICONS.cpu(11)}
+                    <span>02. INJECTOR</span>
                 </div>
+                <div class="lms-folder-card-body">
+                    <div class="lms-card-header-row">
+                        <div class="lms-card-icon-box">
+                            ${LMS_ICONS.target(20)}
+                        </div>
+                        <div class="lms-card-meta-pill">
+                            <span>Format: 1. a. Jawaban</span>
+                            <span class="lms-badge-pill green">READY</span>
+                        </div>
+                    </div>
+                    <h3 class="lms-card-title">Auto-Fill Jawaban</h3>
+                    <p class="lms-card-desc">Paste jawaban dari AI. Ekstensi otomatis memilih opsi radio / checkbox / dropdown / isian &amp; lanjut halaman.</p>
 
-                <div class="lms-modal-body">
-                    <p class="lms-modal-desc">
-                        Tempel (Paste) jawaban dari <b>ChatGPT / Claude / Gemini</b> ke kolom di bawah ini, lalu klik <b>Mulai Inject Jawaban</b>.
-                    </p>
+                    <textarea id="lms-paste-textarea" class="lms-neo-textarea" placeholder="# Paste jawaban AI di sini...&#10;Contoh Berhuruf: 1. a. Event-based coordination&#10;Contoh Tanpa Huruf: 2. False&#10;Contoh Checkbox: 3. a. Opsi 1 | c. Opsi 3&#10;Contoh Beranak: 4. a. Sub A: Opsi 1 | b. Sub B: Opsi 2&#10;Contoh Isian: 5. SDD">${escapeHtml(draftAnswers)}</textarea>
 
-                    <div class="lms-textarea-toolbar">
-                        <button class="lms-mini-btn" id="lms-btn-paste-clipboard" title="Tempel otomatis dari clipboard">
-                            <span>📋 Tempel dari Clipboard</span>
+                    <div class="lms-textarea-quick-bar">
+                        <button class="lms-quick-chip" id="lms-btn-paste-clipboard">
+                            ${LMS_ICONS.clipboard(12)}
+                            <span>Paste Clipboard</span>
                         </button>
-                        <button class="lms-mini-btn" id="lms-btn-toggle-cheatsheet" title="Lihat contoh format">
-                            <span>❓ Contoh Format</span>
+                        <button class="lms-quick-chip" id="lms-btn-toggle-cheatsheet">
+                            ${LMS_ICONS.info(12)}
+                            <span>Contoh Format</span>
+                        </button>
+                        <button class="lms-quick-chip" id="lms-btn-clear-paste">
+                            ${LMS_ICONS.trash(12)}
+                            <span>Bersihkan</span>
                         </button>
                     </div>
 
                     <div id="lms-cheatsheet-box" class="lms-cheatsheet-box" style="display:none;">
-                        <div class="lms-cheatsheet-item"><b>Pilihan Ganda:</b> <code>1. a. Teks Jawaban</code> atau <code>1. a</code></div>
-                        <div class="lms-cheatsheet-item"><b>True / False:</b> <code>2. True</code> atau <code>2. False</code></div>
-                        <div class="lms-cheatsheet-item"><b>Checkbox (Pilih Lebih Dari 1):</b> <code>3. a. Opsi 1 | c. Opsi 3</code></div>
-                        <div class="lms-cheatsheet-item"><b>Menjodohkan / Sub-soal:</b> <code>4. a. Sub A: Jawaban 1 | b. Sub B: Jawaban 2</code></div>
-                        <div class="lms-cheatsheet-item"><b>Isian Singkat:</b> <code>5. Jawaban Isian</code></div>
+                        <div class="lms-cheatsheet-item"><b>Ada Huruf Opsi:</b> <code>1. a. Teks Jawaban</code></div>
+                        <div class="lms-cheatsheet-item"><b>Tanpa Huruf (True/False):</b> <code>2. False</code></div>
+                        <div class="lms-cheatsheet-item"><b>Checkbox (Pilih Banyak):</b> <code>3. a. Opsi 1 | c. Opsi 3</code></div>
+                        <div class="lms-cheatsheet-item"><b>Menjodohkan / Sub-soal:</b> <code>4. a. Sub A: Opsi 1 | b. Sub B: Opsi 2</code></div>
+                        <div class="lms-cheatsheet-item"><b>Isian Singkat:</b> <code>5. SDD</code></div>
                     </div>
 
-                    <textarea id="lms-paste-textarea" class="lms-neo-textarea" placeholder="Tempel jawaban AI di sini...&#10;&#10;Contoh:&#10;1. a. Event-based coordination&#10;2. c. Shared data space&#10;3. True&#10;4. a. Opsi 1 | c. Opsi 3&#10;5. a. Sub-soal A: Opsi 1 | b. Sub-soal B: Opsi 2&#10;6. SDD">${escapeHtml(draftAnswers)}</textarea>
-
-                    <div class="lms-modal-tip">
-                        💡 <i>Tips: Nomor soal harus sesuai urutan kuis. Ekstensi akan mengisi kuis dan berpindah halaman otomatis!</i>
-                    </div>
-                </div>
-
-                <div class="lms-modal-footer">
-                    <button class="lms-neo-btn secondary-white" id="lms-btn-cancel-paste">Tutup</button>
-                    <button class="lms-neo-btn primary-green" id="lms-btn-start-inject" style="flex:2;">
-                        <span>⚡ MULAI INJECT JAWABAN</span>
+                    <button class="lms-neo-btn btn-purple" id="lms-btn-start-inject">
+                        ${LMS_ICONS.bolt(15)}
+                        <span>2. Isi Jawaban (Inject) &amp; Next</span>
                     </button>
                 </div>
             </div>
         `;
 
+        const overlay = document.createElement('div');
+        overlay.id = 'lms-solver-modal-overlay';
+        overlay.innerHTML = buildInPageModalShell('inject', bodyHtml);
         document.body.appendChild(overlay);
+        attachModalNavHandlers(overlay);
 
         const textarea = overlay.querySelector('#lms-paste-textarea');
         textarea.focus();
 
-        // Toggle Cheatsheet
+        textarea.addEventListener('input', () => {
+            const val = textarea.value;
+            if (val.trim()) chrome.storage.local.set({ savedAnswers: val });
+            else chrome.storage.local.remove(['savedAnswers']);
+        });
+
         const btnToggleCheat = overlay.querySelector('#lms-btn-toggle-cheatsheet');
         const cheatBox = overlay.querySelector('#lms-cheatsheet-box');
         if (btnToggleCheat && cheatBox) {
@@ -1677,47 +2653,48 @@ function showInPagePasteModal() {
             };
         }
 
-        // Paste from clipboard button
         const btnPasteClip = overlay.querySelector('#lms-btn-paste-clipboard');
         if (btnPasteClip) {
             btnPasteClip.onclick = async () => {
                 const clipText = await readFromClipboard();
                 if (clipText) {
                     textarea.value = clipText;
-                    showInPageToast("Jawaban berhasil ditempel dari clipboard!");
+                    chrome.storage.local.set({ savedAnswers: clipText });
+                    showInPageToast("Berhasil ditempel dari Clipboard!");
                 } else {
-                    showInPageToast("Gunakan Ctrl+V untuk menempelkan jawaban.", "warning");
+                    showInPageToast("Gunakan Ctrl+V pada kolom teks.", "warning");
                     textarea.focus();
                 }
             };
         }
 
-        // Close button
-        const btnClose = overlay.querySelector('#lms-close-paste-modal');
-        const btnCancel = overlay.querySelector('#lms-btn-cancel-paste');
-        const handleClose = () => {
-            const val = textarea.value.trim();
-            if (val) {
-                chrome.storage.local.set({ savedAnswers: val });
-            }
-            closeInPageModals();
-        };
-        if (btnClose) btnClose.onclick = handleClose;
-        if (btnCancel) btnCancel.onclick = handleClose;
+        const btnClear = overlay.querySelector('#lms-btn-clear-paste');
+        if (btnClear) {
+            btnClear.onclick = () => {
+                textarea.value = "";
+                chrome.storage.local.remove(['savedAnswers', 'isAutoFilling']);
+                showInPageToast("Input dibersihkan!");
+                textarea.focus();
+            };
+        }
 
-        // Start Inject Button
         const btnInject = overlay.querySelector('#lms-btn-start-inject');
         if (btnInject) {
             btnInject.onclick = () => {
                 const text = textarea.value.trim();
                 if (!text) {
-                    showInPageToast("Silakan tempel jawaban AI terlebih dahulu!", "warning");
+                    showInPageToast("Paste jawaban AI terlebih dahulu!", "warning");
                     textarea.focus();
+                    return;
+                }
+                if (!window.location.href.includes('attempt.php')) {
+                    chrome.storage.local.set({ savedAnswers: text });
+                    showInPageToast("Jawaban disimpan! Buka halaman attempt.php untuk mulai mengisi.", "warning");
                     return;
                 }
 
                 btnInject.disabled = true;
-                btnInject.innerHTML = '<span>⚡ Memulai Pengisian Kuis...</span>';
+                btnInject.innerHTML = `${LMS_ICONS.bolt(15)}<span>Memulai Pengisian Kuis...</span>`;
 
                 let firstQ = document.querySelector('.que .qno')?.innerText.trim();
 
@@ -1725,7 +2702,6 @@ function showInPagePasteModal() {
                     chrome.storage.local.remove(['consumedEntryIndexes', 'injectAuditLog']);
                     closeInPageModals();
 
-                    // If user is currently on a page with question number > 1 (e.g. page 5 after scraping), navigate to page 1
                     if (firstQ && parseInt(firstQ) > 1 && window.location.href.includes('attempt.php')) {
                         let q1Btn = document.querySelector('.qnbutton[href*="page=0"], a.qnbutton:first-of-type, #mod_quiz_navblock a.qnbutton');
                         if (q1Btn && q1Btn.href) {
@@ -1748,7 +2724,264 @@ function showInPagePasteModal() {
 }
 
 // ========================================================
-// FLOATING QUICK LAUNCHER PILL (POJOK KANAN BAWAH)
+// IN-PAGE MODAL 3: 03. REVIEW - SCRAPE HASIL & LAPORAN KUIS
+// ========================================================
+function showInPageReviewModal(initialReviewData = null, autoOpenReport = false) {
+    ensureInjectedStyles();
+    closeInPageModals();
+
+    const renderWithData = (reviewData) => {
+        const hasReview = Boolean(reviewData && reviewData.questions && reviewData.questions.length > 0);
+        let gradeDisplay = "100";
+        if (hasReview) {
+            let gradeRaw = reviewData.summary?.grade || `${reviewData.correctCount}/${reviewData.totalQuestions}`;
+            let gm = String(gradeRaw).match(/([\d.,]+)/);
+            gradeDisplay = gm ? gm[1] : gradeRaw;
+        }
+
+        const reviewResultHtml = hasReview ? `
+            <div class="lms-review-box" id="lms-inpage-review-box">
+                <div class="lms-stats-grid">
+                    <div class="lms-stat-item grade-stat">
+                        <div class="lms-stat-label">Nilai</div>
+                        <div class="lms-stat-value">${escapeHtml(String(gradeDisplay))}</div>
+                    </div>
+                    <div class="lms-stat-item">
+                        <div class="lms-stat-label">Total Soal</div>
+                        <div class="lms-stat-value">${reviewData.totalQuestions || 0}</div>
+                    </div>
+                    <div class="lms-stat-item">
+                        <div class="lms-stat-label">Benar</div>
+                        <div class="lms-stat-value">${reviewData.correctCount || 0}</div>
+                    </div>
+                </div>
+
+                <div class="lms-action-row-mini">
+                    <button class="lms-btn-mini btn-yellow" id="lms-rev-copy-quick" title="Salin kunci singkat siap inject">
+                        ${LMS_ICONS.copy(13)}
+                        <span>Kunci Singkat</span>
+                    </button>
+                    <button class="lms-btn-mini btn-green" id="lms-rev-to-injector" title="Masukkan kunci ke Auto-Fill Injector">
+                        ${LMS_ICONS.arrowUpRight(13)}
+                        <span>Ke Injector</span>
+                    </button>
+                </div>
+
+                <div class="lms-action-row-mini" style="margin-bottom:0 !important;">
+                    <button class="lms-btn-mini btn-purple" id="lms-rev-open-report" title="Lihat & Unduh Laporan Lengkap">
+                        ${LMS_ICONS.fileText(13)}
+                        <span>Laporan</span>
+                    </button>
+                    <button class="lms-btn-mini btn-white" id="lms-rev-open-detail" title="Lihat rincian tiap soal & kunci">
+                        ${LMS_ICONS.eye(13)}
+                        <span>Detail Soal</span>
+                    </button>
+                </div>
+
+                <!-- Panel Laporan Lengkap (Salin / PDF / DOCX / TXT) -->
+                <div id="lms-rev-report-panel" style="display:${autoOpenReport ? 'block' : 'none'}; margin-top:10px; border-top:2px solid #000; padding-top:8px;">
+                    <div class="lms-preview-header">
+                        <span>LAPORAN HASIL &amp; KUNCI LENGKAP</span>
+                        <span>${reviewData.totalQuestions} Soal</span>
+                    </div>
+                    <pre class="lms-report-pre">${escapeHtml(reviewData.fullReport || "")}</pre>
+                    <div class="lms-action-row-mini">
+                        <button class="lms-btn-mini btn-green" id="lms-rev-report-copy">
+                            ${LMS_ICONS.copy(12)}
+                            <span>Salin Laporan</span>
+                        </button>
+                        <button class="lms-btn-mini btn-yellow" id="lms-rev-report-pdf">
+                            ${LMS_ICONS.fileText(12)}
+                            <span>Unduh .PDF</span>
+                        </button>
+                    </div>
+                    <div class="lms-action-row-mini" style="margin-bottom:0 !important;">
+                        <button class="lms-btn-mini btn-purple" id="lms-rev-report-docx">
+                            ${LMS_ICONS.fileWord(12)}
+                            <span>Unduh .DOCX</span>
+                        </button>
+                        <button class="lms-btn-mini btn-white" id="lms-rev-report-txt">
+                            ${LMS_ICONS.download(12)}
+                            <span>Unduh .TXT</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Panel Detail Soal -->
+                <div id="lms-rev-detail-panel" class="lms-detail-scroll" style="display:none; border-top:2px solid #000; padding-top:8px;">
+                    ${(reviewData.questions || []).map(q => `
+                        <div class="lms-q-card">
+                            <div class="lms-q-card-head">
+                                <span>Soal No. ${escapeHtml(String(q.number))}</span>
+                                <span class="lms-badge-pill ${q.isCorrect ? 'green' : 'pink'}">${q.isCorrect ? 'BENAR' : 'SALAH'}</span>
+                            </div>
+                            <div class="lms-q-card-text">${escapeHtml(q.text || '')}</div>
+                            <div class="lms-q-card-key">Kunci: ${escapeHtml(q.reportKey || q.correctAnswer || q.studentAnswer || '(Tidak terdeteksi)')}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : '';
+
+        const bodyHtml = `
+            <div class="lms-folder-card card-review">
+                <div class="lms-folder-tab">
+                    ${LMS_ICONS.award(11)}
+                    <span>03. REVIEW</span>
+                </div>
+                <div class="lms-folder-card-body">
+                    <div class="lms-card-header-row">
+                        <div class="lms-card-icon-box">
+                            ${LMS_ICONS.fileText(20)}
+                        </div>
+                        <div class="lms-card-meta-pill">
+                            <span>Kunci Kuis</span>
+                            <span class="lms-badge-pill pink">REVIEW</span>
+                        </div>
+                    </div>
+                    <h3 class="lms-card-title">Scrape Hasil Kuis</h3>
+                    <p class="lms-card-desc">Ekstrak kunci jawaban benar, laporan lengkap, nilai, dan statistik dari halaman review kuis LMS.</p>
+
+                    <button class="lms-neo-btn btn-pink" id="lms-btn-scrape-review-now">
+                        ${LMS_ICONS.checkCircle(16)}
+                        <span>3. Scrape Hasil &amp; Kunci Kuis</span>
+                    </button>
+
+                    ${reviewResultHtml}
+                </div>
+            </div>
+        `;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'lms-solver-modal-overlay';
+        overlay.innerHTML = buildInPageModalShell('review', bodyHtml);
+        document.body.appendChild(overlay);
+        attachModalNavHandlers(overlay);
+
+        const btnScrapeNow = overlay.querySelector('#lms-btn-scrape-review-now');
+        if (btnScrapeNow) {
+            btnScrapeNow.onclick = async () => {
+                if (!window.location.href.includes('review.php')) {
+                    showInPageToast("Buka halaman review.php setelah submit kuis untuk scrape hasil jawaban!", "warning");
+                    return;
+                }
+                btnScrapeNow.disabled = true;
+                btnScrapeNow.innerHTML = `${LMS_ICONS.clock(15)}<span>Mengekstrak Kunci Jawaban...</span>`;
+                try {
+                    const res = await scrapeQuizReview();
+                    if (res && res.success) {
+                        chrome.storage.local.set({ lastReviewResult: res }, () => {
+                            showInPageToast(`Berhasil scrape ${res.totalQuestions} soal & kunci jawaban!`);
+                            showInPageReviewModal(res);
+                        });
+                    } else {
+                        btnScrapeNow.disabled = false;
+                        btnScrapeNow.innerHTML = `${LMS_ICONS.checkCircle(16)}<span>3. Scrape Hasil &amp; Kunci Kuis</span>`;
+                        showInPageToast(res?.message || "Gagal menscrape hasil kuis!", "warning");
+                    }
+                } catch (err) {
+                    btnScrapeNow.disabled = false;
+                    showInPageToast("Terjadi kesalahan saat membaca halaman review!", "error");
+                }
+            };
+        }
+
+        if (hasReview) {
+            const reportPanel = overlay.querySelector('#lms-rev-report-panel');
+            const detailPanel = overlay.querySelector('#lms-rev-detail-panel');
+
+            const btnQuick = overlay.querySelector('#lms-rev-copy-quick');
+            if (btnQuick) {
+                btnQuick.onclick = async () => {
+                    const ok = await copyToClipboard(reviewData.quickAnswerKey);
+                    if (ok) showInPageToast("Kunci singkat disalin ke clipboard!");
+                };
+            }
+
+            const btnToInj = overlay.querySelector('#lms-rev-to-injector');
+            if (btnToInj) {
+                btnToInj.onclick = () => {
+                    chrome.storage.local.set({ savedAnswers: reviewData.quickAnswerKey }, () => {
+                        showInPageToast("Kunci jawaban dimasukkan ke Auto-Fill Injector!");
+                        showInPagePasteModal();
+                    });
+                };
+            }
+
+            const btnOpenReport = overlay.querySelector('#lms-rev-open-report');
+            if (btnOpenReport && reportPanel) {
+                btnOpenReport.onclick = () => {
+                    const nextShow = reportPanel.style.display === 'none';
+                    reportPanel.style.display = nextShow ? 'block' : 'none';
+                    if (nextShow && detailPanel) detailPanel.style.display = 'none';
+                };
+            }
+
+            const btnOpenDetail = overlay.querySelector('#lms-rev-open-detail');
+            if (btnOpenDetail && detailPanel) {
+                btnOpenDetail.onclick = () => {
+                    const nextShow = detailPanel.style.display === 'none';
+                    detailPanel.style.display = nextShow ? 'block' : 'none';
+                    if (nextShow && reportPanel) reportPanel.style.display = 'none';
+                };
+            }
+
+            const btnRepCopy = overlay.querySelector('#lms-rev-report-copy');
+            if (btnRepCopy) {
+                btnRepCopy.onclick = async () => {
+                    const ok = await copyToClipboard(reviewData.fullReport);
+                    if (ok) showInPageToast("Laporan lengkap berhasil disalin!");
+                };
+            }
+
+            const btnRepPdf = overlay.querySelector('#lms-rev-report-pdf');
+            if (btnRepPdf) {
+                btnRepPdf.onclick = async () => {
+                    btnRepPdf.disabled = true;
+                    try {
+                        const ok = await generateReviewPdfDocument(reviewData);
+                        if (ok) showInPageToast("Laporan .PDF berhasil diunduh!");
+                    } finally {
+                        btnRepPdf.disabled = false;
+                    }
+                };
+            }
+
+            const btnRepDocx = overlay.querySelector('#lms-rev-report-docx');
+            if (btnRepDocx) {
+                btnRepDocx.onclick = async () => {
+                    btnRepDocx.disabled = true;
+                    try {
+                        const ok = await generateReviewDocxDocument(reviewData);
+                        if (ok) showInPageToast("Laporan .DOCX berhasil diunduh!");
+                    } finally {
+                        btnRepDocx.disabled = false;
+                    }
+                };
+            }
+
+            const btnRepTxt = overlay.querySelector('#lms-rev-report-txt');
+            if (btnRepTxt) {
+                btnRepTxt.onclick = () => {
+                    const blob = new Blob([reviewData.fullReport || ""], { type: 'text/plain;charset=utf-8' });
+                    downloadBlob(blob, `Laporan_Hasil_Kuis_LMS_${new Date().toISOString().slice(0, 10)}.txt`);
+                    showInPageToast("Laporan .TXT berhasil diunduh!");
+                };
+            }
+        }
+    };
+
+    if (initialReviewData) {
+        renderWithData(initialReviewData);
+    } else {
+        chrome.storage.local.get(['lastReviewResult'], (d) => {
+            renderWithData(d.lastReviewResult || null);
+        });
+    }
+}
+
+// ========================================================
+// FLOATING QUICK LAUNCHER PILL (POJOK KANAN BAWAH - TUCKII UI)
 // ========================================================
 function ensureFloatingPill() {
     if (!window.location.href.includes('/mod/quiz/')) return;
@@ -1764,9 +2997,11 @@ function ensureFloatingPill() {
         } catch (e) {}
 
         pill.innerHTML = `
-            ${devilIcon ? `<img src="${devilIcon}" style="width:16px;height:16px;vertical-align:middle;" alt="LMS">` : '😈'}
+            <span class="lms-pill-logo">
+                ${devilIcon ? `<img src="${devilIcon}" style="width:16px;height:16px;display:block;" alt="LMS">` : LMS_ICONS.bolt(14)}
+            </span>
             <span>LMS Solver</span>
-            <span class="lms-pill-badge" id="lms-pill-badge">MENU</span>
+            <span class="lms-pill-badge" id="lms-pill-badge">${LMS_ICONS.layers(11)}<span>MENU</span></span>
         `;
         document.body.appendChild(pill);
 
@@ -1792,13 +3027,11 @@ function updateFloatingPillStatus(hasScrape) {
     const badge = document.getElementById('lms-pill-badge');
     if (badge) {
         if (hasScrape) {
-            badge.innerText = '📋 HASIL SIAP';
-            badge.style.background = '#4ADE80';
-            badge.style.color = '#000000';
+            badge.className = 'lms-pill-badge ready';
+            badge.innerHTML = `${LMS_ICONS.check(11)}<span>HASIL SIAP</span>`;
         } else {
-            badge.innerText = 'MENU';
-            badge.style.background = '#000000';
-            badge.style.color = '#FFDE59';
+            badge.className = 'lms-pill-badge';
+            badge.innerHTML = `${LMS_ICONS.layers(11)}<span>MENU</span>`;
         }
     }
 }
@@ -1811,35 +3044,63 @@ function toggleFloatingMenu() {
     }
 
     ensureInjectedStyles();
-    chrome.storage.local.get(['scrapeResult', 'scrapeStructuredData', 'savedAnswers'], (data) => {
+    chrome.storage.local.get(['scrapeResult', 'scrapeStructuredData', 'savedAnswers', 'lastReviewResult'], (data) => {
         const menu = document.createElement('div');
         menu.id = 'lms-solver-floating-menu';
+        const isAttempt = window.location.href.includes('attempt.php');
+        const isReview = window.location.href.includes('review.php');
 
-        let html = '';
+        let html = `
+            <div class="lms-fmenu-heading">
+                <span>Koleksi Fitur</span>
+                <span class="lms-fmenu-badge">3 FITUR</span>
+            </div>
+        `;
+
+        if (isAttempt) {
+            html += `
+                <button class="lms-floating-menu-item" id="lms-fmenu-start-scrape">
+                    <span class="lms-fmenu-icon green">${LMS_ICONS.play(13)}</span>
+                    <span>1. Mulai Auto-Scrape Soal</span>
+                </button>
+            `;
+        }
+
         if (data.scrapeResult) {
-            html += `<button class="lms-floating-menu-item" id="lms-fmenu-scrape-result">
-                <span>📋 Buka Hasil Scrape Soal</span>
-            </button>`;
+            html += `
+                <button class="lms-floating-menu-item" id="lms-fmenu-scrape-result">
+                    <span class="lms-fmenu-icon yellow">${LMS_ICONS.fileDown(13)}</span>
+                    <span>Hasil Scrape Soal</span>
+                </button>
+            `;
         }
 
-        html += `<button class="lms-floating-menu-item" id="lms-fmenu-paste-answer">
-            <span>🤖 Input Jawaban AI (Paste)</span>
-        </button>`;
+        html += `
+            <button class="lms-floating-menu-item" id="lms-fmenu-paste-answer">
+                <span class="lms-fmenu-icon purple">${LMS_ICONS.cpu(13)}</span>
+                <span>2. Auto-Fill / Paste Jawaban</span>
+            </button>
+        `;
 
-        if (window.location.href.includes('attempt.php')) {
-            html += `<button class="lms-floating-menu-item" id="lms-fmenu-start-scrape">
-                <span>🚀 Mulai Auto-Scrape Kuis</span>
-            </button>`;
-
-            if (data.savedAnswers) {
-                html += `<button class="lms-floating-menu-item" id="lms-fmenu-start-inject">
-                    <span>⚡ Jalankan Auto-Fill Jawaban</span>
-                </button>`;
-            }
-        }
+        html += `
+            <button class="lms-floating-menu-item" id="lms-fmenu-scrape-review">
+                <span class="lms-fmenu-icon pink">${LMS_ICONS.award(13)}</span>
+                <span>3. Scrape Hasil Jawaban</span>
+            </button>
+        `;
 
         menu.innerHTML = html;
         document.body.appendChild(menu);
+
+        const btnStartScrape = menu.querySelector('#lms-fmenu-start-scrape');
+        if (btnStartScrape) {
+            btnStartScrape.onclick = () => {
+                menu.remove();
+                chrome.storage.local.set({ isAutoScraping: true, scrapedQuestions: "", scrapedQuestionsData: [] }, () => {
+                    performScrapeStep();
+                });
+            };
+        }
 
         const btnScrapeRes = menu.querySelector('#lms-fmenu-scrape-result');
         if (btnScrapeRes) {
@@ -1857,21 +3118,23 @@ function toggleFloatingMenu() {
             };
         }
 
-        const btnStartScrape = menu.querySelector('#lms-fmenu-start-scrape');
-        if (btnStartScrape) {
-            btnStartScrape.onclick = () => {
+        const btnScrapeReview = menu.querySelector('#lms-fmenu-scrape-review');
+        if (btnScrapeReview) {
+            btnScrapeReview.onclick = async () => {
                 menu.remove();
-                chrome.storage.local.set({ isAutoScraping: true, scrapedQuestions: "", scrapedQuestionsData: [] }, () => {
-                    performScrapeStep();
-                });
-            };
-        }
-
-        const btnStartInject = menu.querySelector('#lms-fmenu-start-inject');
-        if (btnStartInject) {
-            btnStartInject.onclick = () => {
-                menu.remove();
-                autoFillAndNext();
+                if (isReview) {
+                    const res = await scrapeQuizReview();
+                    if (res && res.success) {
+                        chrome.storage.local.set({ lastReviewResult: res }, () => {
+                            showInPageToast(`Berhasil scrape ${res.totalQuestions} soal & kunci jawaban!`);
+                            showInPageReviewModal(res);
+                        });
+                    } else {
+                        showInPageReviewModal();
+                    }
+                } else {
+                    showInPageReviewModal(data.lastReviewResult || null);
+                }
             };
         }
     });
@@ -1920,16 +3183,22 @@ if (!window.__LMS_SOLVER_LISTENER_REGISTERED__) {
         sendResponse(result);
         return true;
     } else if (request.action === "scrape_quiz_review") {
-        try {
-            let result = scrapeQuizReview();
-            if (result.success) {
-                chrome.storage.local.set({ lastReviewResult: result });
+        (async () => {
+            try {
+                let result = await scrapeQuizReview();
+                if (result && result.success) {
+                    chrome.storage.local.set({ lastReviewResult: result });
+                }
+                sendResponse(result);
+            } catch (err) {
+                console.error("Error scraping quiz review:", err);
+                sendResponse({ success: false, message: err.message || "Gagal menscrape review kuis." });
             }
-            sendResponse(result);
-        } catch (err) {
-            console.error("Error scraping quiz review:", err);
-            sendResponse({ success: false, message: err.message || "Gagal menscrape review kuis." });
-        }
+        })();
+        return true;
+    } else if (request.action === "open_inpage_review_modal") {
+        showInPageReviewModal();
+        sendResponse({ success: true });
         return true;
     } else if (request.action === "open_inpage_scrape_modal") {
         chrome.storage.local.get(['scrapeResult', 'scrapeStructuredData'], (data) => {
@@ -2106,11 +3375,30 @@ async function performScrapeStep() {
                     nextBtn.click();
                 });
             } else {
+                let normalQuestions = currentData.filter(q => !q.isMatch && !q.isShortAnswer);
+                let anyWithLetters = normalQuestions.some(q => q.hasOptionLetters);
+                let anyWithoutLetters = normalQuestions.some(q => q.hasOptionLetters === false);
+
+                let normalRuleText = "";
+                if (anyWithLetters && !anyWithoutLetters) {
+                    normalRuleText =
+                        "1. Soal Pilihan Ganda (memiliki huruf opsi a/b/c/d/e): Tulis dengan format `Nomor. HurufOpsi. TeksJawaban` atau `Nomor. HurufOpsi`\n" +
+                        "(Sertakan huruf opsi a/b/c/d/e sesuai soal agar akurasi 100%. Contoh: `1. a. Event-based coordination` atau `2. c. Shared data space`).\n";
+                } else if (!anyWithLetters && anyWithoutLetters) {
+                    normalRuleText =
+                        "1. Soal Pilihan Ganda / True-False (tanpa huruf opsi a/b/c/d): Tulis LANGSUNG teks jawabannya TANPA menambahkan huruf a/b/c/d sendiri!\n" +
+                        "Format: `Nomor. TeksJawaban` (Contoh: `1. False` atau `2. True` atau `3. Event-based coordination`).\n";
+                } else {
+                    normalRuleText =
+                        "1. Soal Biasa (Pilihan Ganda / True-False):\n" +
+                        "   - Jika opsi di soal ADA huruf opsi (a/b/c/d/e): Tulis dengan format `Nomor. HurufOpsi. TeksJawaban` (Contoh: `1. a. Event-based coordination`).\n" +
+                        "   - Jika opsi di soal TIDAK ADA huruf opsi (hanya teks langsung seperti True/False): Tulis LANGSUNG teks jawabannya TANPA menambahkan huruf a/b/c/d sendiri! Format: `Nomor. TeksJawaban` (Contoh: `8. False` atau `9. True`).\n";
+                }
+
                 let finalPromptHeader = "Tolong jawab kuis ini. Berikan jawaban akhirnya saja tanpa penjelasan.\n\n" +
                     "ATURAN FORMAT JAWABAN:\n\n" +
-                    "1. Soal Biasa (Pilihan Ganda / True-False): Tulis dengan format `Nomor. HurufOpsi. TeksJawaban` atau `Nomor. HurufOpsi`\n" +
-                    "(Sertakan huruf opsi a/b/c/d/e agar akurasi 100%. Contoh: '1. a. Event-based coordination' atau '2. c. Shared data space' atau '3. True').\n" +
-                    "2. Soal Pilih Lebih Dari Satu (Checkbox): Pisahkan tiap jawaban benar dengan tanda pipa (`|`). Contoh: `4. a. Opsi 1 | c. Opsi 3`\n" +
+                    normalRuleText +
+                    "2. Soal Pilih Lebih Dari Satu (Checkbox): Pisahkan tiap jawaban benar dengan tanda pipa (`|`). Sertakan huruf opsi hanya jika di soal terdapat huruf opsi (Contoh: `4. a. Opsi 1 | c. Opsi 3` atau `4. Opsi 1 | Opsi 3`).\n" +
                     "3. Soal Menjodohkan / Beranak: Tuliskan setiap pasangan sub-soal dalam satu baris dengan nomor soal utamanya, pisahkan masing-masing sub-soal dengan tanda pipa (`|`).\n" +
                     "Format: `Nomor. a. Sub-soal A: Opsi Jawaban | b. Sub-soal B: Opsi Jawaban | dst...`\n" +
                     "4. Soal Isian Singkat: Tulis langsung `Nomor. Jawaban` (contoh: `5. SDD`).\n\n" +
@@ -2196,6 +3484,7 @@ async function scrapeCurrentPage() {
         let isShortAnswer = q.classList.contains('shortanswer') || q.classList.contains('numerical') || (textInput !== null && !isMatchQuestion && !q.querySelector('input[type="radio"], input[type="checkbox"]'));
 
         let optionsList = [];
+        let hasOptionLetters = false;
 
         if (isMatchQuestion && matchRows.length > 0) {
             let qHeader = `Soal ${qNum} (Tipe Menjodohkan / Sub-soal):\n${qText}`;
@@ -2256,7 +3545,7 @@ async function scrapeCurrentPage() {
             }
 
             let seenOpts = new Set();
-            optNodes.forEach((optNode, idx) => {
+            optNodes.forEach((optNode) => {
                 let extracted = extractOptionData(optNode);
                 let optText = extracted.cleanedText || extracted.rawText;
                 if (!optText) return;
@@ -2264,10 +3553,16 @@ async function scrapeCurrentPage() {
                 if (seenOpts.has(dedupKey)) return;
                 seenOpts.add(dedupKey);
 
-                let displayLetter = extracted.letter ? extracted.letter.toLowerCase() : getLetterLabel(idx);
-                let formattedOpt = `${displayLetter}. ${optText}`;
-                output += `${formattedOpt}\n`;
-                optionsList.push(formattedOpt);
+                if (extracted.letter) {
+                    hasOptionLetters = true;
+                    let displayLetter = extracted.letter.toLowerCase();
+                    let formattedOpt = `${displayLetter}. ${optText}`;
+                    output += `${formattedOpt}\n`;
+                    optionsList.push(formattedOpt);
+                } else {
+                    output += `- ${optText}\n`;
+                    optionsList.push(optText);
+                }
             });
             output += "\n";
         }
@@ -2278,7 +3573,8 @@ async function scrapeCurrentPage() {
             images: images,
             options: optionsList,
             isMatch: isMatchQuestion,
-            isShortAnswer: isShortAnswer
+            isShortAnswer: isShortAnswer,
+            hasOptionLetters: hasOptionLetters
         });
     }
 
@@ -2404,7 +3700,7 @@ function extractOptionData(optNode) {
     let cleanedText = normalizeExactStr(rawText);
 
     if (!letterText) {
-        let letterMatch = rawText.match(/^([a-zA-Z0-9])[.)]\s*/);
+        let letterMatch = rawText.match(/^([a-zA-Z])[.)]\s+/);
         if (letterMatch) {
             letterText = letterMatch[1].toUpperCase();
         }
@@ -2505,20 +3801,26 @@ function parseEntryTarget(contentStr) {
 }
 
 // Menghitung bobot skor kecocokan: Huruf Opsi (50%) + Teks Jawaban (50%)
+// Jika opsi di soal LMS tidak memiliki huruf opsi (misal True/False), skor dinilai 100% dari kecocokan teks.
 function calculateOptionMatchScore(parsedTarget, opt) {
     const hasLetter = Boolean(parsedTarget.targetLetter);
     const hasText = Boolean(parsedTarget.targetText && parsedTarget.targetText.trim().length > 0);
+    const optHasLetter = Boolean(opt.letter && opt.letter.trim().length > 0);
 
     let letterScore = 0;
     let textScore = 0;
     let finalScore = 0;
 
     if (hasLetter && hasText) {
-        letterScore = (opt.letter && opt.letter === parsedTarget.targetLetter) ? 1.0 : 0.0;
         textScore = computeRefinedSimilarity(parsedTarget.targetText, opt.cleanedText);
-        finalScore = (letterScore * 0.50) + (textScore * 0.50);
+        if (optHasLetter) {
+            letterScore = (opt.letter === parsedTarget.targetLetter) ? 1.0 : 0.0;
+            finalScore = (letterScore * 0.50) + (textScore * 0.50);
+        } else {
+            finalScore = textScore;
+        }
     } else if (hasLetter && !hasText) {
-        letterScore = (opt.letter && opt.letter === parsedTarget.targetLetter) ? 1.0 : 0.0;
+        letterScore = (optHasLetter && opt.letter === parsedTarget.targetLetter) ? 1.0 : 0.0;
         finalScore = letterScore;
     } else if (hasText) {
         textScore = computeRefinedSimilarity(parsedTarget.targetText, opt.cleanedText);
@@ -3345,9 +4647,55 @@ function animateNextButtonClick(nextBtn, onComplete) {
 // ========================================================
 // 7. FUNGSI: SCRAPER HASIL KUIS / REVIEW
 // ========================================================
-function scrapeQuizReview() {
+function stripRightAnswerPrefix(text) {
+    if (!text) return "";
+    return text
+        .replace(/\u00A0/g, ' ')
+        .replace(/^(?:the\s+correct\s+answers?\s+(?:is|are)|jawaban\s+yang\s+benar\s+adalah|correct\s+answers?)\s*:?\s*/i, '')
+        .trim();
+}
+
+function cleanSingleRightAnswer(text) {
+    let cleaned = stripRightAnswerPrefix(text);
+    // Hapus tanda petik & titik pembungkus khas Moodle True/False: 'True'. -> True
+    let quotedMatch = cleaned.match(/^['"‘’“”](.+?)['"‘’“”]\.?$/);
+    if (quotedMatch) {
+        cleaned = quotedMatch[1].trim();
+    }
+    return cleaned;
+}
+
+function extractRightAnswerItems(rightAnswerNode) {
+    if (!rightAnswerNode) return [];
+    let blockNodes = Array.from(rightAnswerNode.querySelectorAll('p, li'));
+    if (blockNodes.length > 0) {
+        return blockNodes
+            .map(el => el.innerText.replace(/\u00A0/g, ' ').replace(/,\s*$/, '').trim())
+            .filter(Boolean);
+    }
+    let stripped = stripRightAnswerPrefix(rightAnswerNode.innerText || "");
+    if (!stripped) return [];
+    let lines = stripped.split(/\r?\n/).map(s => s.replace(/,\s*$/, '').trim()).filter(Boolean);
+    if (lines.length > 1) return lines;
+    return [stripped];
+}
+
+async function scrapeQuizReview() {
     ensureInjectedStyles();
-    showLmsHud("REVIEW SCRAPER", "Mengekstrak nilai & kunci jawaban kuis...", 50);
+    showLmsHud("REVIEW SCRAPER", "Mengekstrak nilai, gambar & kunci jawaban kuis...", 50);
+
+    function markCorrectOptionDom(optNode) {
+        if (!optNode) return;
+        optNode.classList.add('lms-solver-highlight-selected');
+        let existingBadge = optNode.querySelector('.lms-solver-auto-badge');
+        if (!existingBadge) {
+            let badge = document.createElement('span');
+            badge.className = 'lms-solver-auto-badge';
+            badge.innerText = 'KUNCI BENAR';
+            let labelContainer = optNode.querySelector('div[data-region="answer-label"]') || optNode;
+            labelContainer.appendChild(badge);
+        }
+    }
 
     // 1. Ekstrak data ringkasan review kuis (Summary Table)
     let summary = {
@@ -3376,7 +4724,7 @@ function scrapeQuizReview() {
     }
 
     // 2. Ekstrak seluruh pertanyaan kuis
-    let questionElements = document.querySelectorAll('.que');
+    let questionElements = Array.from(document.querySelectorAll('.que'));
     if (!questionElements || questionElements.length === 0) {
         removeLmsHud(500);
         return {
@@ -3390,17 +4738,30 @@ function scrapeQuizReview() {
     let correctCount = 0;
     let incorrectCount = 0;
 
-    questionElements.forEach((q, idx) => {
+    for (let idx = 0; idx < questionElements.length; idx++) {
+        let q = questionElements[idx];
         let qNum = q.querySelector('.qno')?.innerText.trim() 
             || q.querySelector('h3.no')?.innerText.replace(/Question|Soal/i, '').trim() 
             || (idx + 1).toString();
 
         let qTextElem = q.querySelector('.qtext');
         let qText = "";
+        let images = [];
         if (qTextElem) {
+            let imgElements = qTextElem.querySelectorAll('img');
+            for (let mIdx = 0; mIdx < imgElements.length; mIdx++) {
+                let imgData = await resolveAndFetchQuizImage(imgElements[mIdx], qNum, "ReviewSoal");
+                if (imgData) images.push(imgData);
+            }
             let clone = qTextElem.cloneNode(true);
             clone.querySelectorAll('.accesshide, .sr-only').forEach(el => el.remove());
             qText = clone.innerText.trim();
+        }
+
+        let ansImgElements = q.querySelectorAll('.answer img');
+        for (let aIdx = 0; aIdx < ansImgElements.length; aIdx++) {
+            let imgData = await resolveAndFetchQuizImage(ansImgElements[aIdx], qNum, "ReviewOpsi");
+            if (imgData) images.push(imgData);
         }
 
         let state = q.querySelector('.state')?.innerText.trim() || "";
@@ -3423,43 +4784,110 @@ function scrapeQuizReview() {
             || stateLower.includes('benar')
         );
 
-        // Deteksi apakah ini soal matching pada review
         let matchRows = Array.from(q.querySelectorAll('table.answer tbody tr, table.answer tr, .ablock table tr'))
             .filter(r => r.querySelector('td.text') !== null);
         let isMatchQuestion = q.classList.contains('match') || matchRows.length > 0;
 
-        // Deteksi tipe isian singkat (short answer) pada review
         let textInput = q.querySelector('.answer input[type="text"], .answer input[type="number"], .answer input:not([type]), .ablock input[type="text"], input[type="text"].form-control, .answer textarea, input[type="text"]');
         let isShortAnswer = q.classList.contains('shortanswer') || q.classList.contains('numerical') || (textInput !== null && !isMatchQuestion && !q.querySelector('input[type="radio"], input[type="checkbox"]'));
 
         let options = [];
+        let matchDetails = [];
         let correctAnswerText = "";
+        let reportKey = "";
         let correctOptionLetter = "";
         let studentSelectedAnswer = "";
         let studentSelectedLetter = "";
+        let isCheckboxQuestion = false;
 
         if (isMatchQuestion && matchRows.length > 0) {
             let matchPairs = [];
+            let rowInfos = [];
             matchRows.forEach((row, rIdx) => {
                 let subName = row.querySelector('td.text')?.innerText.trim() || "";
                 let chosenSelect = row.querySelector('select');
                 let chosenText = "";
                 if (chosenSelect) {
-                    chosenText = chosenSelect.options[chosenSelect.selectedIndex]?.text.trim() || "";
+                    let selOpt = chosenSelect.options[chosenSelect.selectedIndex];
+                    chosenText = (selOpt && selOpt.value !== "0") ? selOpt.text.trim() : "";
                 } else {
                     chosenText = row.querySelector('td.control')?.innerText.trim() || "";
                 }
-                matchPairs.push(`${getLetterLabel(rIdx)}. ${subName}: ${chosenText}`);
+                let ctrlCell = row.querySelector('td.control');
+                let isRowCorrect = Boolean(
+                    (ctrlCell && ctrlCell.classList.contains('correct'))
+                    || row.querySelector('.fa-circle-check, .fa-check, [title="Correct"], [aria-label="Correct"]')
+                    || (isQuestionCorrect && chosenText)
+                );
+                rowInfos.push({ subName, chosenText, isRowCorrect, row });
+                matchPairs.push(`${getLetterLabel(rIdx)}. ${subName}: ${chosenText || '-'}`);
             });
             studentSelectedAnswer = matchPairs.join(' | ');
 
+            let parsedPairs = [];
             let rightAnswerNode = q.querySelector('.rightanswer, .outcome .feedback, .specificfeedback');
             if (rightAnswerNode) {
-                correctAnswerText = rightAnswerNode.innerText
-                    .replace(/^(the correct answer is:?|jawaban yang benar adalah:?|correct answer:?)\s*/i, '')
-                    .trim();
-            } else if (isQuestionCorrect) {
-                correctAnswerText = studentSelectedAnswer;
+                let rawItems = extractRightAnswerItems(rightAnswerNode);
+                if (rawItems.length === 1 && (rawItems[0].match(/→|->|=>/g) || []).length > 1) {
+                    rawItems = rawItems[0].split(/,\s*(?=[^,]+?(?:→|->|=>))/).map(s => s.replace(/,\s*$/, '').trim()).filter(Boolean);
+                }
+
+                rawItems.forEach(item => {
+                    let cleanItem = stripRightAnswerPrefix(item);
+                    let arrowMatch = cleanItem.match(/^(.+?)\s*(?:→|->|=>)\s*(.+)$/);
+                    if (arrowMatch) {
+                        parsedPairs.push({
+                            sub: arrowMatch[1].trim(),
+                            ans: arrowMatch[2].replace(/,\s*$/, '').trim()
+                        });
+                    }
+                });
+            }
+
+            if (parsedPairs.length > 0) {
+                let usedIdx = new Set();
+                rowInfos.forEach((rInfo, rIdx) => {
+                    let foundIdx = parsedPairs.findIndex((p, pIdx) => !usedIdx.has(pIdx) && cleanCompareStr(p.sub) === cleanCompareStr(rInfo.subName));
+                    let corrAns = foundIdx !== -1 ? parsedPairs[foundIdx].ans : (rInfo.isRowCorrect ? rInfo.chosenText : "");
+                    if (foundIdx !== -1) usedIdx.add(foundIdx);
+                    matchDetails.push({
+                        letter: getLetterLabel(rIdx),
+                        sub: rInfo.subName,
+                        chosen: rInfo.chosenText,
+                        correct: corrAns,
+                        isRowCorrect: rInfo.isRowCorrect || (corrAns && cleanCompareStr(rInfo.chosenText) === cleanCompareStr(corrAns))
+                    });
+                });
+                parsedPairs.forEach((p, pIdx) => {
+                    if (!usedIdx.has(pIdx)) {
+                        matchDetails.push({
+                            letter: getLetterLabel(matchDetails.length),
+                            sub: p.sub,
+                            chosen: "",
+                            correct: p.ans,
+                            isRowCorrect: false
+                        });
+                    }
+                });
+
+                correctAnswerText = matchDetails
+                    .map(m => `${m.letter}. ${m.sub}: ${m.correct}`)
+                    .join(' | ');
+                reportKey = correctAnswerText;
+            } else {
+                rowInfos.forEach((rInfo, rIdx) => {
+                    matchDetails.push({
+                        letter: getLetterLabel(rIdx),
+                        sub: rInfo.subName,
+                        chosen: rInfo.chosenText,
+                        correct: rInfo.isRowCorrect ? rInfo.chosenText : "",
+                        isRowCorrect: rInfo.isRowCorrect
+                    });
+                });
+                if (isQuestionCorrect) {
+                    correctAnswerText = studentSelectedAnswer;
+                    reportKey = studentSelectedAnswer;
+                }
             }
         } else if (isShortAnswer && textInput) {
             let studentVal = textInput.value || textInput.getAttribute('value') || "";
@@ -3467,12 +4895,11 @@ function scrapeQuizReview() {
 
             let rightAnswerNode = q.querySelector('.rightanswer, .outcome .feedback, .specificfeedback');
             if (rightAnswerNode) {
-                correctAnswerText = rightAnswerNode.innerText
-                    .replace(/^(the correct answer is:?|jawaban yang benar adalah:?|correct answer:?)\s*/i, '')
-                    .trim();
+                correctAnswerText = cleanSingleRightAnswer(rightAnswerNode.innerText);
             } else if (isQuestionCorrect) {
                 correctAnswerText = studentSelectedAnswer;
             }
+            reportKey = correctAnswerText;
 
             if (isQuestionCorrect) {
                 textInput.classList.add('lms-solver-highlight-selected');
@@ -3486,13 +4913,16 @@ function scrapeQuizReview() {
                 }
             }
         } else {
-            let optNodes = q.querySelectorAll('.answer .r0, .answer .r1');
+            let optNodes = Array.from(q.querySelectorAll('.answer .r0, .answer .r1'));
             if (optNodes.length === 0) {
-                optNodes = q.querySelectorAll('.answer > div, .answer fieldset > div');
+                optNodes = Array.from(q.querySelectorAll('.answer > div, .answer fieldset > div'));
             }
 
+            isCheckboxQuestion = optNodes.some(n => n.querySelector('input[type="checkbox"]') !== null);
+            let studentSelectedItems = [];
+
             optNodes.forEach(optNode => {
-                let letterText = optNode.querySelector('.answernumber')?.innerText.replace(/[.\s]/g, '').trim() || "";
+                let letterText = optNode.querySelector('.answernumber')?.innerText.replace(/[.\s)]/g, '').trim() || "";
 
                 let labelDiv = optNode.querySelector('div[data-region="answer-label"] .flex-fill')
                     || optNode.querySelector('.flex-fill')
@@ -3502,16 +4932,14 @@ function scrapeQuizReview() {
                 let optCleanText = "";
                 if (labelDiv) {
                     let clone = labelDiv.cloneNode(true);
-                    // Hapus icon tanpa menghapus tag format styling teks seperti <i>, <em>, <b>
                     clone.querySelectorAll('.answernumber, .icon, i.icon, i.fa, i[class*="fa"], .accesshide, .sr-only, .lms-solver-auto-badge, .lms-solver-review-badge').forEach(el => el.remove());
-                    optCleanText = clone.innerText.trim();
+                    optCleanText = clone.innerText.replace(/\u00A0/g, ' ').trim();
                 }
 
                 let radio = optNode.querySelector('input[type="radio"], input[type="checkbox"]');
                 let isSelected = radio ? radio.checked : false;
-                if (isSelected) {
-                    studentSelectedAnswer = optCleanText;
-                    studentSelectedLetter = letterText;
+                if (isSelected && optCleanText) {
+                    studentSelectedItems.push({ letter: letterText, text: optCleanText });
                 }
 
                 let isOptCorrect = false;
@@ -3525,52 +4953,106 @@ function scrapeQuizReview() {
 
                 let isOptIncorrect = optNode.classList.contains('incorrect') || optNode.querySelector('.fa-times, .fa-circle-xmark, [title="Incorrect"], [aria-label="Incorrect"], .text-danger') !== null;
 
-                options.push({
+                let optObj = {
+                    node: optNode,
                     letter: letterText,
                     text: optCleanText,
                     isSelected: isSelected,
                     isCorrect: isOptCorrect,
                     isIncorrect: isOptIncorrect
-                });
+                };
+                options.push(optObj);
 
-                if (isOptCorrect && !correctAnswerText) {
-                    correctAnswerText = optCleanText;
-                    correctOptionLetter = letterText;
-
-                    optNode.classList.add('lms-solver-highlight-selected');
-                    let existingBadge = optNode.querySelector('.lms-solver-auto-badge');
-                    if (!existingBadge) {
-                        let badge = document.createElement('span');
-                        badge.className = 'lms-solver-auto-badge';
-                        badge.innerText = 'KUNCI BENAR';
-                        let labelContainer = optNode.querySelector('div[data-region="answer-label"]') || optNode;
-                        labelContainer.appendChild(badge);
-                    }
+                if (isOptCorrect) {
+                    markCorrectOptionDom(optNode);
                 }
             });
 
+            if (studentSelectedItems.length > 0) {
+                studentSelectedAnswer = studentSelectedItems
+                    .map(it => it.letter && studentSelectedItems.length > 1 ? `${it.letter}. ${it.text}` : it.text)
+                    .join(' | ');
+                studentSelectedLetter = studentSelectedItems.length === 1 ? studentSelectedItems[0].letter : "";
+            }
+
             let rightAnswerNode = q.querySelector('.rightanswer, .outcome .feedback, .specificfeedback');
-            if (!correctAnswerText && rightAnswerNode) {
-                let rawRightText = rightAnswerNode.innerText.trim();
-                let cleanedRight = rawRightText
-                    .replace(/^(the correct answer is:?|jawaban yang benar adalah:?|correct answer:?)\s*/i, '')
-                    .trim();
-
-                if (cleanedRight) {
-                    correctAnswerText = cleanedRight;
-
-                    options.forEach(opt => {
-                        if (opt.text && (cleanedRight.toLowerCase().includes(opt.text.toLowerCase()) || opt.text.toLowerCase().includes(cleanedRight.toLowerCase()))) {
-                            opt.isCorrect = true;
-                            if (!correctOptionLetter) correctOptionLetter = opt.letter;
+            let rightItems = [];
+            if (rightAnswerNode) {
+                if (isCheckboxQuestion) {
+                    rightItems = extractRightAnswerItems(rightAnswerNode).map(s => cleanSingleRightAnswer(s)).filter(Boolean);
+                    rightItems.forEach(rText => {
+                        let rCmp = cleanCompareStr(rText);
+                        let matchedOpt = options.find(opt => opt.text && cleanCompareStr(opt.text) === rCmp);
+                        if (!matchedOpt) {
+                            let bestOpt = null;
+                            let bestSim = 0;
+                            options.forEach(opt => {
+                                if (!opt.text) return;
+                                let sim = computeRefinedSimilarity(rText, opt.text);
+                                if (sim > bestSim) {
+                                    bestSim = sim;
+                                    bestOpt = opt;
+                                }
+                            });
+                            if (bestOpt && bestSim >= 0.85) matchedOpt = bestOpt;
+                        }
+                        if (matchedOpt) {
+                            matchedOpt.isCorrect = true;
+                            markCorrectOptionDom(matchedOpt.node);
                         }
                     });
+                } else {
+                    let hasDomCorrect = options.some(o => o.isCorrect);
+                    if (!hasDomCorrect) {
+                        let cleanedRight = cleanSingleRightAnswer(rightAnswerNode.innerText);
+                        if (cleanedRight) {
+                            let rCmp = cleanCompareStr(cleanedRight);
+                            let matchedOpt = options.find(opt => opt.text && cleanCompareStr(opt.text) === rCmp);
+                            if (!matchedOpt) {
+                                let bestOpt = null;
+                                let bestSim = 0;
+                                options.forEach(opt => {
+                                    if (!opt.text) return;
+                                    let sim = computeRefinedSimilarity(cleanedRight, opt.text);
+                                    if (sim > bestSim) {
+                                        bestSim = sim;
+                                        bestOpt = opt;
+                                    }
+                                });
+                                if (bestOpt && bestSim >= 0.80) matchedOpt = bestOpt;
+                            }
+
+                            if (matchedOpt) {
+                                matchedOpt.isCorrect = true;
+                                markCorrectOptionDom(matchedOpt.node);
+                            } else {
+                                correctAnswerText = cleanedRight;
+                            }
+                        }
+                    }
                 }
             }
 
-            if (!correctAnswerText && isQuestionCorrect && studentSelectedAnswer) {
+            let correctOpts = options.filter(o => o.isCorrect && o.text);
+            if (correctOpts.length > 0) {
+                if (isCheckboxQuestion || correctOpts.length > 1) {
+                    correctAnswerText = correctOpts.map(o => o.text).join(' | ');
+                    reportKey = correctOpts.map(o => o.letter ? `${o.letter}. ${o.text}` : o.text).join(' | ');
+                    correctOptionLetter = "";
+                } else {
+                    correctAnswerText = correctOpts[0].text;
+                    correctOptionLetter = correctOpts[0].letter || "";
+                    reportKey = correctOptionLetter ? `${correctOptionLetter}. ${correctAnswerText}` : correctAnswerText;
+                }
+            } else if (!correctAnswerText && rightItems.length > 0) {
+                correctAnswerText = rightItems.join(' | ');
+                reportKey = correctAnswerText;
+            } else if (!correctAnswerText && isQuestionCorrect && studentSelectedAnswer) {
                 correctAnswerText = studentSelectedAnswer;
                 correctOptionLetter = studentSelectedLetter;
+                reportKey = correctOptionLetter ? `${correctOptionLetter}. ${correctAnswerText}` : correctAnswerText;
+            } else {
+                reportKey = correctOptionLetter ? `${correctOptionLetter}. ${correctAnswerText}` : correctAnswerText;
             }
         }
 
@@ -3580,32 +5062,36 @@ function scrapeQuizReview() {
             incorrectCount++;
         }
 
+        let serializableOptions = options.map(({ node, ...rest }) => rest);
+
         questionsData.push({
             number: qNum,
             text: qText,
+            images: images,
             state: state,
             grade: grade,
             isCorrect: isQuestionCorrect,
-            options: options,
+            isMatch: isMatchQuestion,
+            isCheckbox: isCheckboxQuestion,
+            matchDetails: matchDetails,
+            options: serializableOptions,
             correctAnswer: correctAnswerText,
+            reportKey: reportKey,
             correctLetter: correctOptionLetter,
             studentAnswer: studentSelectedAnswer,
             studentLetter: studentSelectedLetter
         });
 
         let answerForQuick = correctAnswerText || studentSelectedAnswer || "(Tidak terdeteksi)";
-        let letterPrefix = (correctOptionLetter && !isMatchQuestion && !isShortAnswer)
-            ? `${correctOptionLetter.toLowerCase()}. `
-            : "";
-        quickAnswerKeyList.push(`${qNum}. ${letterPrefix}${answerForQuick}`);
-    });
+        quickAnswerKeyList.push(`${qNum}. ${answerForQuick}`);
+    }
 
     let quickAnswerKey = quickAnswerKeyList.join('\n');
 
-    // 3. Bangun Laporan Lengkap
+    // 3. Bangun Laporan Lengkap yang Rapi & Terstruktur
     let fullReport = "";
     fullReport += "========================================================\n";
-    fullReport += "         LMS QUIZ REVIEW - HASIL & KUNCI JAWABAN        \n";
+    fullReport += "         LMS QUIZ REVIEW - LAPORAN & KUNCI JAWABAN      \n";
     fullReport += "========================================================\n";
     if (summary.grade)     fullReport += `Nilai Akhir : ${summary.grade}\n`;
     if (summary.marks)     fullReport += `Total Poin  : ${summary.marks}\n`;
@@ -3617,26 +5103,46 @@ function scrapeQuizReview() {
 
     questionsData.forEach(q => {
         fullReport += `--------------------------------------------------------\n`;
-        fullReport += `[SOAL NO. ${q.number}] ${q.state ? `(${q.state} - ${q.grade})` : ""}\n`;
+        let statusTag = q.isCorrect ? "[BENAR]" : "[SALAH]";
+        fullReport += `[SOAL NO. ${q.number}] ${statusTag} ${q.grade ? `(${q.grade})` : ""}\n`;
         fullReport += `Pertanyaan :\n${q.text}\n\n`;
-        if (q.options && q.options.length > 0) {
+
+        if (q.isMatch && q.matchDetails && q.matchDetails.length > 0) {
+            fullReport += `Pasangan Sub-Soal :\n`;
+            q.matchDetails.forEach(m => {
+                if (m.isRowCorrect) {
+                    fullReport += `  [BENAR]           ${m.letter}. ${m.sub} -> ${m.correct}\n`;
+                } else {
+                    fullReport += `  [SALAH]           ${m.letter}. ${m.sub} -> ${m.chosen || '(Kosong)'}  (Kunci: ${m.correct})\n`;
+                }
+            });
+            fullReport += `\n`;
+        } else if (q.options && q.options.length > 0) {
             fullReport += `Pilihan Jawaban :\n`;
             q.options.forEach(opt => {
-                let statusMark = "   ";
-                if (opt.isCorrect) statusMark = "[KUNCI BENAR] ";
-                else if (opt.isSelected) statusMark = "[DIPILIH]     ";
-                
+                let statusMark = "                  ";
+                if (opt.isCorrect && opt.isSelected) statusMark = "[BENAR - DIPILIH] ";
+                else if (opt.isCorrect) statusMark = "[KUNCI BENAR]     ";
+                else if (opt.isSelected) statusMark = "[SALAH - DIPILIH] ";
+
                 let optLabel = opt.letter ? `${opt.letter}. ` : "- ";
                 fullReport += `  ${statusMark}${optLabel}${opt.text}\n`;
             });
             fullReport += `\n`;
         }
-        fullReport += `>>> Kunci Jawaban : ${q.correctAnswer ? `${q.correctLetter ? q.correctLetter + '. ' : ''}${q.correctAnswer}` : '(Belum terdeteksi)'}\n`;
-        if (q.studentAnswer && q.studentAnswer !== q.correctAnswer) {
+
+        let displayKey = q.reportKey || (q.correctAnswer ? `${q.correctLetter ? q.correctLetter + '. ' : ''}${q.correctAnswer}` : '(Belum terdeteksi)');
+        fullReport += `>>> Kunci Jawaban : ${displayKey}\n`;
+        if (!q.isCorrect && q.studentAnswer) {
             fullReport += `>>> Jawaban Anda  : ${q.studentLetter ? q.studentLetter + '. ' : ''}${q.studentAnswer} (Salah)\n`;
         }
         fullReport += `\n`;
     });
+
+    fullReport += "========================================================\n";
+    fullReport += "         RINGKASAN KUNCI CEPAT (SIAP AUTO-FILL)         \n";
+    fullReport += "========================================================\n";
+    fullReport += quickAnswerKey + "\n";
 
     showLmsHud("REVIEW SUKSES!", `Berhasil ekstrak ${questionsData.length} soal! Nilai: ${summary.grade || '100'}`, 100, "SELESAI");
     removeLmsHud(3500);

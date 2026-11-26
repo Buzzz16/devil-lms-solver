@@ -1217,12 +1217,12 @@
                 </div>
 
                 <div class="action-row-mini">
-                    <button class="btn-mini btn-white" id="btnCopyFullReport"
-                        title="Copy soal lengkap + pilihan + kunci">
+                    <button class="btn-mini btn-purple" id="btnCopyFullReport"
+                        title="Lihat &amp; Unduh Laporan Lengkap (Salin / PDF / DOCX / TXT)">
                         <svg class="neo-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                         <span>Laporan</span>
                     </button>
-                    <button class="btn-mini btn-white" id="btnPreviewQuestions" title="Lihat semua soal & kunci">
+                    <button class="btn-mini btn-white" id="btnPreviewQuestions" title="Lihat semua soal &amp; kunci">
                         <svg class="neo-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                         <span>Detail Soal</span>
                     </button>
@@ -1232,7 +1232,46 @@
     </div>
 
     <div class="footer-credit">
-        LMS QUIZ Solver v2.7 | babas.corp
+        LMS QUIZ Solver v2.8.8 | babas.corp
+    </div>
+
+    <!-- ==========================================
+         MODAL LAPORAN HASIL KUIS (SALIN / PDF / DOCX / TXT)
+         ========================================== -->
+    <div class="neo-modal-backdrop" id="modalLaporan">
+        <div class="neo-modal-content">
+            <div class="modal-header" style="background: var(--color-purple);">
+                <h4 id="modalLaporanTitle">Laporan Hasil Kuis</h4>
+                <button class="modal-close-btn" id="btnCloseLaporanModal">
+                    <svg class="neo-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 10px;">
+                <pre id="modalLaporanPre" style="background:#fff; border:2px solid #000; border-radius:8px; padding:8px; font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; line-height:1.45; white-space:pre-wrap; word-break:break-word; max-height:195px; overflow-y:auto; box-shadow:2px 2px 0px #000;"></pre>
+            </div>
+            <div class="modal-footer" style="flex-direction: column; gap: 5px;">
+                <div class="action-row-mini" style="width:100%; margin-bottom:0;">
+                    <button class="btn-mini btn-green" id="btnLaporanCopy">
+                        <svg class="neo-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <span>Salin Laporan</span>
+                    </button>
+                    <button class="btn-mini btn-yellow" id="btnLaporanPdf">
+                        <svg class="neo-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <span>Unduh .PDF</span>
+                    </button>
+                </div>
+                <div class="action-row-mini" style="width:100%; margin-bottom:0;">
+                    <button class="btn-mini btn-purple" id="btnLaporanDocx">
+                        <svg class="neo-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13l2 4 2-4"/><line x1="15" y1="13" x2="15" y2="17"/></svg>
+                        <span>Unduh .DOCX</span>
+                    </button>
+                    <button class="btn-mini btn-white" id="btnLaporanTxt">
+                        <svg class="neo-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Unduh .TXT</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ==========================================
